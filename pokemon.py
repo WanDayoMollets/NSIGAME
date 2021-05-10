@@ -1,4 +1,5 @@
 import random
+import math
 
 class Pokemon:
 
@@ -162,10 +163,8 @@ class Pokemon:
         self.level = level
 
     def update_hp(self):
-        for i in range(1,self.level-1):
-            self.set_IV_hp(self.IV_hp+((100*(self.hp-i-10))/i)-(self.EV/4)-2*self.Base_hp)
-            self.set_hp(((2*self.Base_hp+self.IV_hp+(self.EV/4))/100)+i+10)
-            #self.update_hp()
+        self.set_IV_hp(((100*(self.hp-self.level-10))/self.level)-(self.EV/4)-2*self.Base_hp)
+        self.set_hp(math.floor((int((2 * self.hp + self.IV_hp + int(self.EV / 4)) * self.level) / 100) + self.level + 10))
     
     def damage(self, damage):
         self.hp -= damage
@@ -179,8 +178,9 @@ print(f"nom : {test.get_name()}")
 print(f"hp actu {test.get_hp()}")
 print(f"lvl actu {test.get_level()}")
 print(f"IV hp actu {test.get_IV_hp()}")
-test.set_level(5)
+test.set_level(20)
 test.update_hp()
 print(f"lvl mtn {test.get_level()}")
 print(f"hp mtn {test.get_hp()}")
+print(f"IV hp actu {test.get_IV_hp()}")
 print(f"hp de base {test.get_Base_hp()}")
