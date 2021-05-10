@@ -2,7 +2,7 @@ import random
 
 class Pokemon:
 
-    def __init__(self,pokemon_id,name,type1,type2,Base_hp,Base_attack,Base_defense,Base_sp_attack,Base_sp_defense,Base_speed,legendary,level=1,EV=random.randint(0, 255),IV_hp=0,IV_attack=0,IV_defense=0,IV_sp_attack=0,IV_sp_defense=0,IV_speed=0,hp=0,attack=0,defense=0,sp_attack=0,sp_defense=0,speed=0):
+    def __init__(self,pokemon_id,name,type1,type2,Base_hp,Base_attack,Base_defense,Base_sp_attack,Base_sp_defense,Base_speed,legendary):
         self.pokemon_id = pokemon_id
         self.name = name
         self.type1 = type1
@@ -13,21 +13,23 @@ class Pokemon:
         self.Base_sp_attack = Base_sp_attack
         self.Base_sp_defense = Base_sp_defense
         self.Base_speed = Base_speed
-        self.EV = EV
-        self.IV_hp = IV_hp
-        self.IV_attack = IV_attack
-        self.IV_defense = IV_defense
-        self.IV_sp_attack = IV_sp_attack
-        self.IV_sp_defense = IV_sp_defense
-        self.IV_speed = IV_speed
-        self.hp = hp 
+        self.EV = random.randint(0,255)
+        self.hp = Base_hp 
         self.attack = Base_attack
         self.defense = Base_defense
         self.sp_attack = Base_sp_attack
         self.sp_defense = Base_sp_defense
         self.speed = Base_speed
+        self.level = 1
         self.legendary = legendary
-        self.level = level
+        self.IV_hp = 20
+        self.IV_attack = 10
+        self.IV_defense = 10
+        self.IV_sp_attack = 10
+        self.IV_sp_defense = 10
+        self.IV_speed = 10
+        
+        
         
 
     def get_pokemon_id(self):
@@ -158,12 +160,12 @@ class Pokemon:
 
     def set_level(self,level):
         self.level = level
-    
-    def update_IV_hp(self):
-        self.IV_hp = ((100*(self.hp-self.level-10))/self.level)-(self.EV/4)-2*self.Base_hp
 
     def update_hp(self):
-        self.hp = (self.IV_hp +2*self.Base_hp+(self.EV/4))*(self.level/100)+10+self.level
+        for i in range(1,self.level-1):
+            self.set_IV_hp(self.IV_hp+((100*(self.hp-i-10))/i)-(self.EV/4)-2*self.Base_hp)
+            self.set_hp(((2*self.Base_hp+self.IV_hp+(self.EV/4))/100)+i+10)
+            #self.update_hp()
     
     def damage(self, damage):
         self.hp -= damage
@@ -171,5 +173,14 @@ class Pokemon:
     def attack_target(self, target):
         target.damage(self.attack)
 
-test = Pokemon(15,"Jibril","feu","eau",180,20,60,25,75,30,False)
-test2= Pokemon(15,"Jibril","feu","eau",180,20,60,25,75,30,False)
+test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
+
+print(f"nom : {test.get_name()}")
+print(f"hp actu {test.get_hp()}")
+print(f"lvl actu {test.get_level()}")
+print(f"IV hp actu {test.get_IV_hp()}")
+test.set_level(5)
+test.update_hp()
+print(f"lvl mtn {test.get_level()}")
+print(f"hp mtn {test.get_hp()}")
+print(f"hp de base {test.get_Base_hp()}")
