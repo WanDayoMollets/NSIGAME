@@ -14,7 +14,6 @@ class Pokemon:
         self.Base_sp_attack = Base_sp_attack
         self.Base_sp_defense = Base_sp_defense
         self.Base_speed = Base_speed
-        self.EV = random.randint(0,255)
         self.hp = Base_hp 
         self.attack = Base_attack
         self.defense = Base_defense
@@ -23,12 +22,18 @@ class Pokemon:
         self.speed = Base_speed
         self.level = 1
         self.legendary = legendary
-        self.IV_hp = 20
-        self.IV_attack = 10
-        self.IV_defense = 10
-        self.IV_sp_attack = 10
-        self.IV_sp_defense = 10
-        self.IV_speed = 10
+        self.EV_hp = random.randint(1,255)
+        self.EV_attack = random.randint(1,255)
+        self.EV_defense = random.randint(1,255)
+        self.EV_sp_attack = random.randint(1,255)
+        self.EV_sp_defense = random.randint(1,255)
+        self.EV_speed = random.randint(1,255)
+        self.IV_hp = random.randint(1,31)
+        self.IV_attack = random.randint(1,31)
+        self.IV_defense = random.randint(1,31)
+        self.IV_sp_attack = random.randint(1,31)
+        self.IV_sp_defense = random.randint(1,31)
+        self.IV_speed = random.randint(1,31)
         
         
         
@@ -62,9 +67,24 @@ class Pokemon:
 
     def get_Base_speed(self):
         return self.Base_speed
-    
-    def get_EV(self):
-        return self.EV
+
+    def get_EV_hp(self):
+        return self.EV_hp
+
+    def get_EV_attack(self):
+        return self.EV_attack
+
+    def get_EV_defense(self):
+        return self.EV_defense
+
+    def get_EV_sp_attack(self):
+        return self.EV_sp_attack
+
+    def get_EV_sp_defense(self):
+        return self.EV_sp_defense
+
+    def get_EV_speed(self):
+        return self.EV_speed
 
     def get_IV_hp(self):
         return self.IV_hp
@@ -120,8 +140,23 @@ class Pokemon:
     def set_hp(self,hp):
         self.hp = hp
     
-    def set_EV(self,EV):
-        self.EV = EV
+    def set_EV_hp(self,EV_hp):
+        self.EV_hp = EV_hp
+    
+    def set_EV_attack(self,EV_attack):
+        self.EV_attack = EV_attack
+
+    def set_EV_defense(self,EV_defense):
+        self.EV_defense = EV_defense
+    
+    def set_EV_sp_attack(self,EV_sp_attack):
+        self.EV_sp_attack = EV_sp_attack
+    
+    def set_EV_sp_defense(self,EV_sp_defense):
+        self.EV_sp_defense = EV_sp_defense
+    
+    def set_EV_speed(self,EV_speed):
+        self.EV_speed = EV_speed
     
     def set_IV_hp(self,IV_hp):
         self.IV_hp = IV_hp
@@ -163,8 +198,30 @@ class Pokemon:
         self.level = level
 
     def update_hp(self):
-        self.set_IV_hp(((100*(self.hp-self.level-10))/self.level)-(self.EV/4)-2*self.Base_hp)
-        self.set_hp(math.floor((int((2 * self.hp + self.IV_hp + int(self.EV / 4)) * self.level) / 100) + self.level + 10))
+        self.set_hp(math.floor((int((2 * self.Base_hp + self.IV_hp + int(self.EV_hp / 4)) * self.level) / 100) + self.level + 10))
+
+    def update_attack(self):
+        self.set_attack(math.floor(int((2*self.Base_attack+self.IV_attack+int(self.EV_attack/4))*self.level)/100)+5)
+
+    def update_defense(self):
+        self.set_defense(math.floor(int((2*self.Base_defense+self.IV_defense+int(self.EV_defense/4))*self.level)/100)+5)
+
+    def update_sp_attack(self):
+        self.set_sp_attack(math.floor(int((2*self.Base_sp_attack+self.IV_sp_attack+int(self.EV_sp_attack/4))*self.level)/100)+5)
+
+    def update_sp_defense(self):
+        self.set_sp_defense(math.floor(int((2*self.Base_sp_defense+self.IV_sp_defense+int(self.EV_sp_defense/4))*self.level)/100)+5)
+
+    def update_speed(self):
+        self.set_speed(math.floor(int((2*self.Base_speed+self.IV_speed+int(self.EV_speed/4))*self.level)/100)+5)
+
+    def update_stats(self):
+        self.update_hp()
+        self.update_attack()
+        self.update_defense()
+        self.update_sp_attack()
+        self.update_sp_defense()
+        self.update_speed()
     
     def damage(self, damage):
         self.hp -= damage
@@ -173,14 +230,24 @@ class Pokemon:
         target.damage(self.attack)
 
 test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
+test2 = Pokemon(14,"no","feu","vol",55,42,63,35,28,14,False)
+
 
 print(f"nom : {test.get_name()}")
 print(f"hp actu {test.get_hp()}")
+print(f"atck actu {test.get_attack()}")
+print(f"def actu {test.get_defense()}")
+print(f"aspe actu {test.get_sp_attack()}")
+print(f"dspe actu {test.get_sp_defense()}")
+print(f"speed actu {test.get_speed()}")
 print(f"lvl actu {test.get_level()}")
-print(f"IV hp actu {test.get_IV_hp()}")
-test.set_level(20)
-test.update_hp()
+test.set_level(100)
+test.update_stats()
+print("------------------------------------------------")
 print(f"lvl mtn {test.get_level()}")
 print(f"hp mtn {test.get_hp()}")
-print(f"IV hp actu {test.get_IV_hp()}")
-print(f"hp de base {test.get_Base_hp()}")
+print(f"atck actu {test.get_attack()}")
+print(f"def actu {test.get_defense()}")
+print(f"aspe actu {test.get_sp_attack()}")
+print(f"dspe actu {test.get_sp_defense()}")
+print(f"speed actu {test.get_speed()}")
