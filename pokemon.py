@@ -229,12 +229,29 @@ class Pokemon:
 
     def attack_target(self, target, move):
         #ajouter condition en fonction du type pour les faiblesses
-        if move.category == "Physical":
+        if move.accuracy == 100 or random.randint(0,99) < move.accuracy:
+            if move.category == "Physical":
+                attackType = self.attack
+                defenseType = self.defense
+            elif move.category == "Special":
+                attackType = self.sp_attack
+                defenseType = self.sp_defense
+            else:
+                attackType = self.attack
+                defenseType = self.defense
             if self.type1 == move.type_move or self.type2 == move.type_move:
-                target.damage(((((self.level*0.4+2)*self.attack*move.power)/target.defense*50)+2)*1.5) # à la fin : *
-        elif move.category == "Special":
-            if self.type1 == move.type_move or self.type2 == move.type_move:
-                target.damage(math.floor((int(self.level*0.4+2)*self.sp_attack*move.power)/target.sp_defense*50+2)*1.5) # à la fin : *
+                STAB = 1
+            else:
+                STAB = 0.75
+            Mod1 = 1
+            Mod2 = 1
+            Mod3 = 1
+            CC = 1
+            R = random.randint(85,100)
+            Type1 = 1
+            Type2 = 1
+            target.damage(math.floor((((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)+2)*CC*Mod2*R/100)*STAB*Type1*Mod3))
+            
                 
 
 test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
@@ -251,8 +268,8 @@ print(f"aspe actu {test.get_sp_attack()}")
 print(f"dspe actu {test.get_sp_defense()}")
 print(f"speed actu {test.get_speed()}")
 print(f"lvl actu {test.get_level()}")
-test.set_level(100)
-test2.set_level(100)
+test.set_level(50)
+test2.set_level(50)
 test.update_stats()
 test2.update_stats()
 print("------------------------------------------------")
