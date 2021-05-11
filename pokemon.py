@@ -1,5 +1,6 @@
 import random
 import math
+from moves import Move
 
 class Pokemon:
 
@@ -226,11 +227,20 @@ class Pokemon:
     def damage(self, damage):
         self.hp -= damage
 
-    def attack_target(self, target):
-        target.damage(self.attack)
+    def attack_target(self, target, move):
+        #ajouter condition en fonction du type pour les faiblesses
+        if move.category == "Physical":
+            if self.type1 == move.type_move or self.type2 == move.type_move:
+                target.damage(((((self.level*0.4+2)*self.attack*move.power)/target.defense*50)+2)*1.5) # à la fin : *
+        elif move.category == "Special":
+            if self.type1 == move.type_move or self.type2 == move.type_move:
+                target.damage(math.floor((int(self.level*0.4+2)*self.sp_attack*move.power)/target.sp_defense*50+2)*1.5) # à la fin : *
+                
 
 test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
 test2 = Pokemon(14,"no","feu","vol",55,42,63,35,28,14,False)
+attaque1 = Move(1,"feuuu","feu","Special",100,100,15)
+attaque2 = Move(2,"boom","sol","Physical",80,100,10)
 
 
 print(f"nom : {test.get_name()}")
@@ -242,7 +252,9 @@ print(f"dspe actu {test.get_sp_defense()}")
 print(f"speed actu {test.get_speed()}")
 print(f"lvl actu {test.get_level()}")
 test.set_level(100)
+test2.set_level(100)
 test.update_stats()
+test2.update_stats()
 print("------------------------------------------------")
 print(f"lvl mtn {test.get_level()}")
 print(f"hp mtn {test.get_hp()}")
@@ -251,3 +263,7 @@ print(f"def actu {test.get_defense()}")
 print(f"aspe actu {test.get_sp_attack()}")
 print(f"dspe actu {test.get_sp_defense()}")
 print(f"speed actu {test.get_speed()}")
+print("----------------------------------------------")
+print(f"hp avant attaque: {test2.get_hp()}")
+test.attack_target(test2,attaque1)
+print(f"Il reste {test2.get_hp()}")
