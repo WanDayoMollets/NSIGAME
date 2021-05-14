@@ -4,7 +4,7 @@ from moves import Move
 
 class Pokemon:
 
-    def __init__(self,pokemon_id,name,type1,type2,Base_hp,Base_attack,Base_defense,Base_sp_attack,Base_sp_defense,Base_speed,legendary):
+    def __init__(self,pokemon_id : int,name : str,type1 : str,type2 : str,Base_hp : int,Base_attack : int,Base_defense : int,Base_sp_attack : int,Base_sp_defense : int,Base_speed : int,legendary : bool,moveset : list):
         self.pokemon_id = pokemon_id
         self.name = name
         self.type1 = type1
@@ -35,9 +35,11 @@ class Pokemon:
         self.IV_sp_attack = random.randint(1,31)
         self.IV_sp_defense = random.randint(1,31)
         self.IV_speed = random.randint(1,31)
+        self.moveSet = moveset
         
         
-        
+    def get_pokemon_move(self,moveNb):
+        return self.moveSet[moveNb-1].name
 
     def get_pokemon_id(self):
         return self.pokemon_id
@@ -253,7 +255,7 @@ class Pokemon:
             target.damage(math.floor((((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)+2)*CC*Mod2*R/100)*STAB*Type1*Mod3))
             
                 
-
+"""
 test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
 test2 = Pokemon(14,"no","feu","vol",55,42,63,35,28,14,False)
 attaque1 = Move(1,"feuuu","feu","Special",100,100,15)
@@ -284,3 +286,4 @@ print("----------------------------------------------")
 print(f"hp avant attaque: {test2.get_hp()}")
 test.attack_target(test2,attaque1)
 print(f"Il reste {test2.get_hp()}")
+"""
