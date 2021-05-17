@@ -29,16 +29,17 @@ class Pokemon:
         self.EV_sp_attack = random.randint(1,255)
         self.EV_sp_defense = random.randint(1,255)
         self.EV_speed = random.randint(1,255)
-        self.IV_hp = random.randint(1,31)
-        self.IV_attack = random.randint(1,31)
-        self.IV_defense = random.randint(1,31)
-        self.IV_sp_attack = random.randint(1,31)
-        self.IV_sp_defense = random.randint(1,31)
-        self.IV_speed = random.randint(1,31)
+        self.IV_hp = random.randint(0,31)
+        self.IV_attack = random.randint(0,31)
+        self.IV_defense = random.randint(0,31)
+        self.IV_sp_attack = random.randint(0,31)
+        self.IV_sp_defense = random.randint(0,31)
+        self.IV_speed = random.randint(0,31)
         self.moveSet = moveset
         
         
     def get_pokemon_move(self,moveNb):
+        """recupere 1 des 4 moves du pokemon"""
         return self.moveSet[moveNb-1].name
 
     def get_pokemon_id(self):
@@ -194,9 +195,6 @@ class Pokemon:
     def set_speed(self,speed):
         self.speed = speed
 
-    def set_legendary(self,legendary):
-        self.legendary = legendary
-
     def set_level(self,level):
         self.level = level
 
@@ -225,6 +223,10 @@ class Pokemon:
         self.update_sp_attack()
         self.update_sp_defense()
         self.update_speed()
+
+    def level_up(self,level):
+        self.set_level(level)
+        self.update_stats()
     
     def damage(self, damage):
         self.hp -= damage
@@ -238,13 +240,10 @@ class Pokemon:
             elif move.category == "Special":
                 attackType = self.sp_attack
                 defenseType = self.sp_defense
-            else:
-                attackType = self.attack
-                defenseType = self.defense
             if self.type1 == move.type_move or self.type2 == move.type_move:
-                STAB = 1
+                STAB = 1.5
             else:
-                STAB = 0.75
+                STAB = 1
             Mod1 = 1
             Mod2 = 1
             Mod3 = 1
@@ -254,36 +253,3 @@ class Pokemon:
             Type2 = 1
             target.damage(math.floor((((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)+2)*CC*Mod2*R/100)*STAB*Type1*Mod3))
             
-                
-"""
-test = Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False)
-test2 = Pokemon(14,"no","feu","vol",55,42,63,35,28,14,False)
-attaque1 = Move(1,"feuuu","feu","Special",100,100,15)
-attaque2 = Move(2,"boom","sol","Physical",80,100,10)
-
-
-print(f"nom : {test.get_name()}")
-print(f"hp actu {test.get_hp()}")
-print(f"atck actu {test.get_attack()}")
-print(f"def actu {test.get_defense()}")
-print(f"aspe actu {test.get_sp_attack()}")
-print(f"dspe actu {test.get_sp_defense()}")
-print(f"speed actu {test.get_speed()}")
-print(f"lvl actu {test.get_level()}")
-test.set_level(50)
-test2.set_level(50)
-test.update_stats()
-test2.update_stats()
-print("------------------------------------------------")
-print(f"lvl mtn {test.get_level()}")
-print(f"hp mtn {test.get_hp()}")
-print(f"atck actu {test.get_attack()}")
-print(f"def actu {test.get_defense()}")
-print(f"aspe actu {test.get_sp_attack()}")
-print(f"dspe actu {test.get_sp_defense()}")
-print(f"speed actu {test.get_speed()}")
-print("----------------------------------------------")
-print(f"hp avant attaque: {test2.get_hp()}")
-test.attack_target(test2,attaque1)
-print(f"Il reste {test2.get_hp()}")
-"""

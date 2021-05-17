@@ -23,12 +23,14 @@ fontMenuChoice = pygame.font.SysFont(None, 30)
 click = False
 
 def draw_text(text,font,color,surface,x,y):
+    """permet d'afficher un texte"""
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x,y)
     surface.blit(textobj, textrect)
 
 def main_menu():
+    """Menu principal -> Jouer, Options, Quitter"""
     while True:
         screen.fill((0,0,0))
         draw_text("Nomékop", fontMenu, (255,255,255), screen, x*0.345,y*0.2)
@@ -36,18 +38,22 @@ def main_menu():
         mx, my = pygame.mouse.get_pos()
 
         play = pygame.Rect(x*0.2,y*0.5,x*0.2,y*0.125)
+        #bouton jouer
         if play.collidepoint((mx,my)):
             if click:
                 battle()
         options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
+        #bouton options
         if options.collidepoint((mx,my)):
             if click:
                 optionsMenu()
         leave = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
+        #bouton quitter
         if leave.collidepoint((mx,my)):
             if click:
                 pygame.quit()
                 sys.exit()
+        #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,0,0), play)
         pygame.draw.rect(screen, (255,0,0), options)
         pygame.draw.rect(screen, (255,0,0), leave)
@@ -69,6 +75,7 @@ def main_menu():
         mainClock.tick(60)
     
 def optionsMenu():
+    """Menu des options"""
     running = True
     while running:
         screen.fill((0,0,0))
@@ -77,9 +84,11 @@ def optionsMenu():
         mx, my = pygame.mouse.get_pos()
 
         back = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
+        #bouton retour
         if back.collidepoint((mx,my)):
             if click:
                 running = False
+        #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,0,0), back)
         draw_text("Retour", fontMenuChoice, (0,0,0), screen, x*0.9,y*0.925)
 
@@ -97,8 +106,11 @@ def optionsMenu():
         mainClock.tick(60)
 
 def battle():
+    """fenetre principale lors d'un combat : attaquer/sac/pokemons"""
     running = True
+    #test : currentPokemon = le 1er pokemon de la team du joueur
     currentPokemon = j1.team[0]
+    opponentCurrentPokemon = IA.team[0]
     while running:
         screen.fill((0,0,0))
 
@@ -106,9 +118,11 @@ def battle():
 
         menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         attackButton = pygame.Rect(x*0.1,y*0.7,x*0.3,y*0.2)
+        #bouton pour attaquer, ouvre le menu d'attaque
         if attackButton.collidepoint((mx,my)):
             if click:
                 attackMenu()
+         #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,255,255),menuBackground)
         pygame.draw.rect(screen, (255,0,0), attackButton)
         draw_text("Attaquer", fontMenuChoice, (0,0,0), screen, x*0.21,y*0.78)
@@ -127,8 +141,10 @@ def battle():
         mainClock.tick(60)
 
 def attackMenu():
+    """Menu d'attaque, affiche les 4 attaques dispo"""
     click = False
     currentPokemon = j1.team[0]
+    opponentCurrentPokemon = IA.team[0]
     attackMenuRunning = True
     while attackMenuRunning:
 
@@ -138,23 +154,33 @@ def attackMenu():
         attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
         if attack1Button.collidepoint((mx,my)):
             if click:
-                print(f"{currentPokemon.get_pokemon_move(1)}")
+                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
+                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[0])
+                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
         attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
         if attack2Button.collidepoint((mx,my)):
             if click:
-                print(f"{currentPokemon.get_pokemon_move(2)}")
+                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
+                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[1])
+                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
         attack3Button = pygame.Rect(x*0.05,y*0.825,x*0.35,y*0.125)
         if attack3Button.collidepoint((mx,my)):
             if click:
-                print(f"{currentPokemon.get_pokemon_move(3)}")
+                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
+                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[2])
+                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
         attack4Button = pygame.Rect(x*0.45,y*0.825,x*0.35,y*0.125)
         if attack4Button.collidepoint((mx,my)):
             if click:
-                print(f"{currentPokemon.get_pokemon_move(4)}")
+                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
+                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[3])
+                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
         returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
+        #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
             if click:
                 attackMenuRunning = False
+        #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,255,255),menuBackground)
         pygame.draw.rect(screen, (255,0,0),attack1Button)
         pygame.draw.rect(screen, (255,0,0),attack2Button)
@@ -176,18 +202,29 @@ def attackMenu():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+            if event.type == pygame.KEYDOWN:
+                #augmente de 1 lvl le pokemon actu
+                if event.key == pygame.K_KP1:
+                    currentPokemon.level_up(currentPokemon.get_level()+1)
+                    print(f"{currentPokemon.get_level()}")
+                #augmente de 5 lvl le pokemon actu
+                if event.key == pygame.K_KP5:
+                    currentPokemon.level_up(currentPokemon.get_level()+5)
+                    print(f"{currentPokemon.get_level()}")
 
         pygame.display.update()
         mainClock.tick(60)
 
+#tests
 
-attaqueP1 = moves.Move(1,"feuuu","feu","Special",100,100,15)
-attaqueP2 = moves.Move(2,"boom","sol","Physical",80,100,10)
-attaqueP3 = moves.Move(2,"tagada","sol","Physical",80,100,10)
-attaqueP4 = moves.Move(2,"yaouh","sol","Physical",80,100,10)
+attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
+attaqueP2 = moves.Move(2,"attack2","sol","Physical",80,100,10)
+attaqueP3 = moves.Move(2,"attack3","sol","Physical",80,100,10)
+attaqueP4 = moves.Move(2,"attack4","sol","Physical",80,100,10)
 
 test = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
-test2 = pokemon.Pokemon(14,"no","feu","vol",55,42,63,35,28,14,False,[attaqueP1])
+test2 = pokemon.Pokemon(14,"no","feu","vol",68,35,65,36,35,13,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 
 j1 = player.Player("TestPlayer",[test,test2],[])
+IA = player.Player("TestPlayer",[test2],[])
 main_menu()

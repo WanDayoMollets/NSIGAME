@@ -1,6 +1,6 @@
 class Move:
 
-    def __init__(self,id_move,name,type_move,category,power,accuracy,pp):
+    def __init__(self,id_move : int,name : str,type_move : str,category : str,power : int,accuracy : int,pp : int):
         self.id_move = id_move
         self.name = name
         self.type_move = type_move
