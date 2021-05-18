@@ -5,3 +5,6 @@ class Player:
         self.team = team #au début [Pokemon1,Pokemon2,Pokemon3->statut none si pas dans l'equipe]
         self.bag = bag #[[nbObjet,objet]]
         self.stage = stage
+
+    def get_name(self):
+        return self.playerName

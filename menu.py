@@ -2,6 +2,8 @@ import pygame
 import random
 import os
 import sys
+import time
+import threading
 import player
 import pokemon
 import moves
@@ -11,7 +13,7 @@ from pygame.sprite import collide_rect
 
 from pygame.constants import MOUSEBUTTONDOWN
 
-x,y=1000,640
+x,y=1280,960
 window_resolution = (x,y)
 launched = True
 mainClock = pygame.time.Clock()
@@ -21,6 +23,8 @@ screen = pygame.display.set_mode(window_resolution)
 fontMenu = pygame.font.SysFont(None, 100)
 fontMenuChoice = pygame.font.SysFont(None, 30)
 click = False
+blockedCommand = False
+tourIA_finished = False
 
 def draw_text(text,font,color,surface,x,y):
     """permet d'afficher un texte"""
@@ -157,6 +161,12 @@ def attackMenu():
                 print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
                 currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[0])
                 print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
+                IATurn = threading.Thread(target = tourIA, args = ())
+                IATurn.start()
+                block = threading.Thread(target = block_user_control, args = ())
+                block.start
+                IATurn.join()
+                attackMenuRunning = False
         attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
         if attack2Button.collidepoint((mx,my)):
             if click:
@@ -207,6 +217,7 @@ def attackMenu():
                 if event.key == pygame.K_KP1:
                     currentPokemon.level_up(currentPokemon.get_level()+1)
                     print(f"{currentPokemon.get_level()}")
+                    print(f"{currentPokemon.get_attack()}")
                 #augmente de 5 lvl le pokemon actu
                 if event.key == pygame.K_KP5:
                     currentPokemon.level_up(currentPokemon.get_level()+5)
@@ -215,16 +226,44 @@ def attackMenu():
         pygame.display.update()
         mainClock.tick(60)
 
+def block_user_control():
+    blockedCommand=True
+    while blockedCommand:
+        blockMenu = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+        pygame.draw.rect(screen, (255,255,255),blockMenu)
+        if tourIA_finished == True:
+            blockedCommand = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        pygame.display.update()
+        mainClock.tick(60)
+
+def tourIA():
+    tourIA_finished = False
+    currentPokemon = j1.team[0]
+    opponentCurrentPokemon = IA.team[0]
+    attaque = random.randint(0,3)
+    print(f"{opponentCurrentPokemon.get_name()} de {IA.get_name()} utilise {opponentCurrentPokemon.get_pokemon_move(attaque+1)}")
+    time.sleep(2)
+    print(f"oof, ça fait mal")
+    time.sleep(1)
+    tourIA_finished = True
+    
+    
+        
+
 #tests
 
 attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
-attaqueP2 = moves.Move(2,"attack2","sol","Physical",80,100,10)
+attaqueP2 = moves.Move(2,"attack2","sol","Physical",100,100,10)
 attaqueP3 = moves.Move(2,"attack3","sol","Physical",80,100,10)
-attaqueP4 = moves.Move(2,"attack4","sol","Physical",80,100,10)
+attaqueP4 = moves.Move(2,"attack4","sol","Special",80,100,10)
 
 test = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 test2 = pokemon.Pokemon(14,"no","feu","vol",68,35,65,36,35,13,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 
 j1 = player.Player("TestPlayer",[test,test2],[])
-IA = player.Player("TestPlayer",[test2],[])
+IA = player.Player("IA",[test2],[])
 main_menu()
