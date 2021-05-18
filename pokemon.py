@@ -234,17 +234,17 @@ class Pokemon:
         if move.accuracy == 100 or random.randint(0,99) < move.accuracy:
             if move.category == "Physical":
                 attackType = self.attack
-                defenseType = self.defense
+                defenseType = target.defense
             elif move.category == "Special":
                 attackType = self.sp_attack
-                defenseType = self.sp_defense
+                defenseType = target.sp_defense
             else:
                 attackType = self.attack
-                defenseType = self.defense
+                defenseType = target.defense
             if self.type1 == move.type_move or self.type2 == move.type_move:
-                STAB = 1
+                STAB = 1.5
             else:
-                STAB = 0.75
+                STAB = 1
             Mod1 = 1
             Mod2 = 1
             Mod3 = 1
