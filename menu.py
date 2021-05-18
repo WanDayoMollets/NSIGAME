@@ -24,7 +24,6 @@ fontMenu = pygame.font.SysFont(None, 100)
 fontMenuChoice = pygame.font.SysFont(None, 30)
 click = False
 blockedCommand = False
-tourIA_finished = False
 
 def draw_text(text,font,color,surface,x,y):
     """permet d'afficher un texte"""
@@ -165,7 +164,7 @@ def attackMenu():
                 IATurn.start()
                 block = threading.Thread(target = block_user_control, args = ())
                 block.start
-                IATurn.join()
+                time.sleep(5)
                 attackMenuRunning = False
         attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
         if attack2Button.collidepoint((mx,my)):
@@ -231,8 +230,6 @@ def block_user_control():
     while blockedCommand:
         blockMenu = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         pygame.draw.rect(screen, (255,255,255),blockMenu)
-        if tourIA_finished == True:
-            blockedCommand = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -241,15 +238,17 @@ def block_user_control():
         mainClock.tick(60)
 
 def tourIA():
-    tourIA_finished = False
     currentPokemon = j1.team[0]
     opponentCurrentPokemon = IA.team[0]
     attaque = random.randint(0,3)
     print(f"{opponentCurrentPokemon.get_name()} de {IA.get_name()} utilise {opponentCurrentPokemon.get_pokemon_move(attaque+1)}")
+    opponentCurrentPokemon.attack_target(currentPokemon,opponentCurrentPokemon.moveSet[attaque])
+    print(f"il reste {currentPokemon.get_hp()} à {currentPokemon.get_name()}")
     time.sleep(2)
     print(f"oof, ça fait mal")
     time.sleep(1)
-    tourIA_finished = True
+    blockedCommand = False
+
     
     
         
