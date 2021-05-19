@@ -170,18 +170,30 @@ def attackMenu():
                 print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
                 currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[1])
                 print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
+                IATurn = threading.Thread(target = tourIA, args = ())
+                IATurn.start()
+                block_user_control(IATurn)
+                attackMenuRunning = False
         attack3Button = pygame.Rect(x*0.05,y*0.825,x*0.35,y*0.125)
         if attack3Button.collidepoint((mx,my)):
             if click:
                 print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
                 currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[2])
                 print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
+                IATurn = threading.Thread(target = tourIA, args = ())
+                IATurn.start()
+                block_user_control(IATurn)
+                attackMenuRunning = False
         attack4Button = pygame.Rect(x*0.45,y*0.825,x*0.35,y*0.125)
         if attack4Button.collidepoint((mx,my)):
             if click:
                 print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
                 currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[3])
                 print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
+                IATurn = threading.Thread(target = tourIA, args = ())
+                IATurn.start()
+                block_user_control(IATurn)
+                attackMenuRunning = False
         returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
         #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
