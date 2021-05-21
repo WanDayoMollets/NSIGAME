@@ -26,7 +26,11 @@ def draw_text(text,font,color,surface,x,y):
     textrect.topleft = (x,y)
     surface.blit(textobj, textrect)
 
-def parlez(texte,x,y):
+def parlez(texte,x,y,color):
+    if color == 0:
+        c = (255,255,255)
+    if color == 1:
+        c= (0,0,0)
     a = True
     b= True
     i=0
@@ -37,7 +41,7 @@ def parlez(texte,x,y):
 
         if b:
             i+=1
-            texteP(texte,i,x,y)
+            texteP(texte,i,x,y,c)
             if i >= len(texte):    
                 b=False
             time.sleep(0.03)
@@ -57,8 +61,8 @@ def parlez(texte,x,y):
         pygame.display.update()
         mainClock.tick(60)
 
-def texteP(texte,i,x,y):
-        draw_text(texte[:i], fontMenuChoice, (255,255,255), screen, x,y)
+def texteP(texte,i,x,y,c):
+        draw_text(texte[:i], fontMenuChoice, c, screen, x,y)
 
 #test
 """

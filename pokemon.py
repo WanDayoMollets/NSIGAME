@@ -252,4 +252,6 @@ class Pokemon:
             Type1 = 1
             Type2 = 1
             target.damage(math.floor((((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)+2)*CC*Mod2*R/100)*STAB*Type1*Mod3))
+        else:
+            print("attaque a échoué")
             
