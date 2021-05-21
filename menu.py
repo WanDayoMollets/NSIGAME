@@ -156,43 +156,31 @@ def attackMenu():
         menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
         if attack1Button.collidepoint((mx,my)):
-            if click:
-                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
-                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[0])
-                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
-                IATurn = threading.Thread(target = tourIA, args = ())
-                IATurn.start()
-                block_user_control(IATurn)
+            if click: 
+                tourJeu = threading.Thread(target = tour, args = (1,))
+                tourJeu.start()
+                block_user_control(tourJeu)
                 attackMenuRunning = False
         attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
         if attack2Button.collidepoint((mx,my)):
             if click:
-                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
-                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[1])
-                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
-                IATurn = threading.Thread(target = tourIA, args = ())
-                IATurn.start()
-                block_user_control(IATurn)
+                tourJeu = threading.Thread(target = tour, args = (2,))
+                tourJeu.start()
+                block_user_control(tourJeu)
                 attackMenuRunning = False
         attack3Button = pygame.Rect(x*0.05,y*0.825,x*0.35,y*0.125)
         if attack3Button.collidepoint((mx,my)):
             if click:
-                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
-                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[2])
-                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
-                IATurn = threading.Thread(target = tourIA, args = ())
-                IATurn.start()
-                block_user_control(IATurn)
+                tourJeu = threading.Thread(target = tour, args = (3,))
+                tourJeu.start()
+                block_user_control(tourJeu)
                 attackMenuRunning = False
         attack4Button = pygame.Rect(x*0.45,y*0.825,x*0.35,y*0.125)
         if attack4Button.collidepoint((mx,my)):
             if click:
-                print(f"vie de l'adversaire avant attaque : {opponentCurrentPokemon.get_hp()}")
-                currentPokemon.attack_target(opponentCurrentPokemon,currentPokemon.moveSet[3])
-                print(f"vie de l'adversaire après attaque : {opponentCurrentPokemon.get_hp()}")
-                IATurn = threading.Thread(target = tourIA, args = ())
-                IATurn.start()
-                block_user_control(IATurn)
+                tourJeu = threading.Thread(target = tour, args = (4,))
+                tourJeu.start()
+                block_user_control(tourJeu)
                 attackMenuRunning = False
         returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
         #retourne sur la fenetre de combat
@@ -235,15 +223,14 @@ def attackMenu():
         pygame.display.update()
         mainClock.tick(60)
 
-def block_user_control(IATurn):
+def block_user_control(tourJeu):
     blockedCommand=True
     while blockedCommand:
         blockMenu = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         pygame.draw.rect(screen, (255,255,255),blockMenu)
-        if not IATurn.is_alive():
+        if not tourJeu.is_alive():
             blockedCommand = False
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -251,18 +238,46 @@ def block_user_control(IATurn):
         mainClock.tick(60)
 
 def tourIA():
-    currentPokemon = j1.team[0]
-    opponentCurrentPokemon = IA.team[0]
     attaque = random.randint(0,3)
-    print(f"{opponentCurrentPokemon.get_name()} de {IA.get_name()} utilise {opponentCurrentPokemon.get_pokemon_move(attaque+1)}")
-    opponentCurrentPokemon.attack_target(currentPokemon,opponentCurrentPokemon.moveSet[attaque])
-    print(f"il reste {currentPokemon.get_hp()} à {currentPokemon.get_name()}")
+    print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} utilise {IA.get_currentPokemon().get_pokemon_move(attaque+1)}")
+    IA.get_currentPokemon().attack_target(j1.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
+    print(f"il reste {j1.get_currentPokemon().get_hp()} à {j1.get_currentPokemon().get_name()}")
     time.sleep(2)
     print(f"oof, ça fait mal")
-    time.sleep(1)
+    if j1.get_currentPokemon().get_hp() <= 0:
+        print(f"{j1.get_currentPokemon().get_name()} est mort")
+        j1.set_currentPokemon(notPokemon)
+    time.sleep(0.5)
+
+def tourJoueur(numAttaque):
+    print(f"vie de l'adversaire avant attaque : {IA.get_currentPokemon().get_hp()}")
+    j1.get_currentPokemon().attack_target(IA.get_currentPokemon(),j1.get_currentPokemon().moveSet[numAttaque-1])
+    print(f"vie de l'adversaire après attaque : {IA.get_currentPokemon().get_hp()}")
+
+def tour(numAttaqueJoueur):
+    if j1.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
+        tourJoueur(numAttaqueJoueur)
+        tourIA()
+    else:
+        tourIA()
+        tourJoueur(numAttaqueJoueur)
         
 
+notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,False,[])
+
+def init_game():
+    #animation + explications du prof
+    #input nom du joueur
+    inputPlayer = "joueur test"
+    #choix du starter
+    Pokemon1 = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
+    Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon
+    joueur = player.Player(inputPlayer,[Pokemon1, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
+
+
 #tests
+
+
 
 attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
 attaqueP2 = moves.Move(2,"attack2","sol","Physical",100,100,10)
