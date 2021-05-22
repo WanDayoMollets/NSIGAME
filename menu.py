@@ -23,7 +23,8 @@ screen = pygame.display.set_mode(window_resolution)
 fontMenu = pygame.font.SysFont(None, 100)
 fontMenuChoice = pygame.font.SysFont(None, 30)
 click = False
-IATurn = 0
+lose = False
+IAlose = False 
 
 def draw_text(text,font,color,surface,x,y):
     """permet d'afficher un texte"""
@@ -44,6 +45,8 @@ def main_menu():
         #bouton jouer
         if play.collidepoint((mx,my)):
             if click:
+                #intro toussatoussa
+                init_game()
                 battle()
         options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
         #bouton options
@@ -111,11 +114,13 @@ def optionsMenu():
 def battle():
     """fenetre principale lors d'un combat : attaquer/sac/pokemons"""
     running = True
-    #test : currentPokemon = le 1er pokemon de la team du joueur
-    currentPokemon = j1.team[0]
-    opponentCurrentPokemon = IA.team[0]
+    global IAlose
+    IAlose = False
     while running:
         screen.fill((0,0,0))
+
+        if lose == True or IAlose == True:
+            running = False
 
         mx, my = pygame.mouse.get_pos()
 
@@ -125,7 +130,7 @@ def battle():
         if attackButton.collidepoint((mx,my)):
             if click:
                 attackMenu()
-         #affiche tous les boutons et le texte
+        #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,255,255),menuBackground)
         pygame.draw.rect(screen, (255,0,0), attackButton)
         draw_text("Attaquer", fontMenuChoice, (0,0,0), screen, x*0.21,y*0.78)
@@ -146,14 +151,13 @@ def battle():
 def attackMenu():
     """Menu d'attaque, affiche les 4 attaques dispo"""
     click = False
-    currentPokemon = j1.team[0]
-    opponentCurrentPokemon = IA.team[0]
     attackMenuRunning = True
     while attackMenuRunning:
 
         mx, my = pygame.mouse.get_pos()
 
         menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+
         attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
         if attack1Button.collidepoint((mx,my)):
             if click: 
@@ -195,10 +199,10 @@ def attackMenu():
         pygame.draw.rect(screen, (255,0,0),attack4Button)
         pygame.draw.rect(screen, (255,0,0), returnButton)
         draw_text("back", fontMenuChoice, (0,0,0), screen, x*0.92,y*0.91)
-        draw_text(f"{currentPokemon.get_pokemon_move(1)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.65)
-        draw_text(f"{currentPokemon.get_pokemon_move(2)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.65)
-        draw_text(f"{currentPokemon.get_pokemon_move(3)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.9)
-        draw_text(f"{currentPokemon.get_pokemon_move(4)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.9)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(1)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.65)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(2)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.65)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(3)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.9)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(4)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.9)
 
         click = False
 
@@ -212,13 +216,16 @@ def attackMenu():
             if event.type == pygame.KEYDOWN:
                 #augmente de 1 lvl le pokemon actu
                 if event.key == pygame.K_KP1:
-                    currentPokemon.level_up(currentPokemon.get_level()+1)
-                    print(f"{currentPokemon.get_level()}")
-                    print(f"{currentPokemon.get_attack()}")
+                    joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+1)
+                    print(f"{joueur.get_currentPokemon().get_level()}")
+                    print(f"{joueur.get_currentPokemon().get_attack()}")
                 #augmente de 5 lvl le pokemon actu
                 if event.key == pygame.K_KP5:
-                    currentPokemon.level_up(currentPokemon.get_level()+5)
-                    print(f"{currentPokemon.get_level()}")
+                    joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+5)
+                    print(f"{joueur.get_currentPokemon().get_level()}")
+                if event.key == pygame.K_KP2:
+                    p = pokemon.Pokemon(28,"pokemonAdd","eau","psy",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
+                    joueur.set_pokemon(2,p)
 
         pygame.display.update()
         mainClock.tick(60)
@@ -240,44 +247,73 @@ def block_user_control(tourJeu):
 def tourIA():
     attaque = random.randint(0,3)
     print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} utilise {IA.get_currentPokemon().get_pokemon_move(attaque+1)}")
-    IA.get_currentPokemon().attack_target(j1.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
-    print(f"il reste {j1.get_currentPokemon().get_hp()} à {j1.get_currentPokemon().get_name()}")
-    time.sleep(2)
+    IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
+    print(f"il reste {joueur.get_currentPokemon().get_hp()} à {joueur.get_currentPokemon().get_name()}")
+    time.sleep(1)
     print(f"oof, ça fait mal")
-    if j1.get_currentPokemon().get_hp() <= 0:
-        print(f"{j1.get_currentPokemon().get_name()} est mort")
-        j1.set_currentPokemon(notPokemon)
     time.sleep(0.5)
 
 def tourJoueur(numAttaque):
     print(f"vie de l'adversaire avant attaque : {IA.get_currentPokemon().get_hp()}")
-    j1.get_currentPokemon().attack_target(IA.get_currentPokemon(),j1.get_currentPokemon().moveSet[numAttaque-1])
+    joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
     print(f"vie de l'adversaire après attaque : {IA.get_currentPokemon().get_hp()}")
 
 def tour(numAttaqueJoueur):
-    if j1.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
+    if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
         tourJoueur(numAttaqueJoueur)
+        check_death()
         tourIA()
+        check_death()
     else:
         tourIA()
+        check_death()
         tourJoueur(numAttaqueJoueur)
-        
+        check_death()
+
+def check_death():
+    if IA.get_currentPokemon().get_hp() <= 0:
+        print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} est mort")
+        IA.set_pokemon(IA.get_currentPokemon_position()+1,notPokemon)
+        if IA.has_pokemon_remaining() == False:
+            print(f"{IA.get_name()} a Perdu!")
+            global IAlose
+            IAlose = True
+            #fin combat
+        else:
+            #L'IA envoie un autre pokemon, défini pour le moment
+            IA.set_currentPokemon(IA.get_pokemon(2))
+            print(f"{IA.get_name()} envoie {IA.get_currentPokemon().get_name()}")
+    if joueur.get_currentPokemon().get_hp() <= 0:
+        print(f"{joueur.get_currentPokemon().get_name()} est mort")
+        joueur.set_pokemon(joueur.get_currentPokemon_position()+1,notPokemon)
+        if joueur.has_pokemon_remaining() == False:
+            print("Perdu!")
+            global lose
+            lose = True
+        else:
+            #choisir un autre pokemon
+            pass
 
 notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,False,[])
 
 def init_game():
+    global joueur
+    attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
+    attaqueP2 = moves.Move(2,"attack2","sol","Physical",100,100,10)
+    attaqueP3 = moves.Move(2,"attack3","sol","Physical",80,100,10)
+    attaqueP4 = moves.Move(2,"attack4","sol","Special",80,100,10)
+    global lose
+    lose = False
     #animation + explications du prof
     #input nom du joueur
     inputPlayer = "joueur test"
     #choix du starter
-    Pokemon1 = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
-    Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon
-    joueur = player.Player(inputPlayer,[Pokemon1, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
+    Pokemon1 = pokemon.Pokemon(12,"yes","feu","vol",55,60,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
+    Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
+    joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
 
 
 #tests
-
-
 
 attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
 attaqueP2 = moves.Move(2,"attack2","sol","Physical",100,100,10)
@@ -287,6 +323,6 @@ attaqueP4 = moves.Move(2,"attack4","sol","Special",80,100,10)
 test = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 test2 = pokemon.Pokemon(14,"no","feu","vol",68,35,65,36,35,13,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 
-j1 = player.Player("TestPlayer",[test,test2],[])
-IA = player.Player("IA",[test2],[])
+IA = player.Player("IA",[test2,test],[])
+
 main_menu()
