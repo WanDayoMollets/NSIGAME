@@ -262,16 +262,18 @@ def tour(numAttaqueJoueur):
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
         tourJoueur(numAttaqueJoueur)
         check_death()
-        tourIA()
-        check_death()
+        if not is_dead(IA.get_currentPokemon()):
+            tourIA()
+            check_death()     
     else:
         tourIA()
         check_death()
-        tourJoueur(numAttaqueJoueur)
-        check_death()
+        if not is_dead(joueur.get_currentPokemon()):
+            tourJoueur(numAttaqueJoueur)
+            check_death()
 
 def check_death():
-    if IA.get_currentPokemon().get_hp() <= 0:
+    if is_dead(IA.get_currentPokemon()):
         print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} est mort")
         IA.set_pokemon(IA.get_currentPokemon_position()+1,notPokemon)
         if IA.has_pokemon_remaining() == False:
@@ -283,7 +285,7 @@ def check_death():
             #L'IA envoie un autre pokemon, défini pour le moment
             IA.set_currentPokemon(IA.get_pokemon(2))
             print(f"{IA.get_name()} envoie {IA.get_currentPokemon().get_name()}")
-    if joueur.get_currentPokemon().get_hp() <= 0:
+    if is_dead(joueur.get_currentPokemon()):
         print(f"{joueur.get_currentPokemon().get_name()} est mort")
         joueur.set_pokemon(joueur.get_currentPokemon_position()+1,notPokemon)
         if joueur.has_pokemon_remaining() == False:
@@ -293,6 +295,11 @@ def check_death():
         else:
             #choisir un autre pokemon
             pass
+
+def is_dead(pokemon):
+    if pokemon.get_hp() <= 0:
+        return True
+    return False
 
 notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,False,[])
 
