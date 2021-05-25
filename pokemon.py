@@ -1,10 +1,10 @@
 import random
 import math
-from moves import Move
+import moves
 
 class Pokemon:
 
-    def __init__(self,pokemon_id : int,name : str,type1 : str,type2 : str,Base_hp : int,Base_attack : int,Base_defense : int,Base_sp_attack : int,Base_sp_defense : int,Base_speed : int,legendary : bool,moveset : list):
+    def __init__(self,pokemon_id : int,name : str,type1 : str,type2 : str,Base_hp : int,Base_attack : int,Base_defense : int,Base_sp_attack : int,Base_sp_defense : int,Base_speed : int, generation : int,legendary : bool,moveset : list):
         self.pokemon_id = pokemon_id
         self.name = name
         self.type1 = type1
@@ -36,6 +36,7 @@ class Pokemon:
         self.IV_sp_defense = random.randint(0,31)
         self.IV_speed = random.randint(0,31)
         self.moveSet = moveset
+        self.generation = generation
         
         
     def get_pokemon_move(self,moveNb):
@@ -232,6 +233,9 @@ class Pokemon:
         self.hp -= damage
 
     def attack_target(self, target, move):
+        global attackType
+        global defenseType
+        print(f"{self.get_name()} utilise {move.name}")
         #ajouter condition en fonction du type pour les faiblesses
         if move.accuracy == 100 or random.randint(0,99) < move.accuracy:
             if move.category == "Physical":
@@ -240,6 +244,8 @@ class Pokemon:
             elif move.category == "Special":
                 attackType = self.sp_attack
                 defenseType = target.sp_defense
+            elif move.category == "Status":
+                print("not implemented yet")
             if self.type1 == move.type_move or self.type2 == move.type_move:
                 STAB = 1.5
             else:
@@ -248,10 +254,15 @@ class Pokemon:
             Mod2 = 1
             Mod3 = 1
             CC = 1
-            R = random.randint(85,100)
+            R = random.randint(85,100)/100
             Type1 = 1
             Type2 = 1
-            target.damage(math.floor((((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)+2)*CC*Mod2*R/100)*STAB*Type1*Mod3))
+            damage = math.floor(((((((self.level*0.4)+2)*move.power*attackType/50)/defenseType)*Mod1)/2)*CC*Mod2*R)*STAB*Type1*Type2*Mod3
+            if damage == 0:
+                target.damage(1)
+            else:
+                target.damage(damage)
+            print(damage)
         else:
             print("attaque a échoué")
             

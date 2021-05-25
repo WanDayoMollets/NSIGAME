@@ -11,7 +11,6 @@ def CSV(id_poke):
         for row in csv_reader:
             if row[0] == str(id_poke):
                 poke = list(row)
-        
     return(poke)
 
 def attack():
@@ -26,24 +25,16 @@ def attack():
 def PokeCSV(id_poke):
 
     Stats = CSV(id_poke)
-    
-    stat = attack()
-    #suppr le % de précision
-    attack1 = moves.Move(int(stat[0]),str(stat[1]),str(stat[3]),str(stat[4]),int(stat[5]),int(stat[6]),int(stat[7]))
-    stat = attack()
-    
-    attack2 = moves.Move(str(stat[0]),stat[1],stat[3],stat[4],str(stat[5]),str(stat[6]),str(stat[7]))
-    stat = attack()
-    
-    attack3 = moves.Move(str(stat[0]),stat[1],stat[3],stat[4],str(stat[5]),str(stat[6]),str(stat[7]))
-    stat = attack()
-                         
-    attack4 = moves.Move(str(stat[0]),stat[1],stat[3],stat[4],str(stat[5]),str(stat[6]),str(stat[7]))
-    stat = attack()
-                        
-    test_poke = pokemon.Pokemon(str(Stats[0]),Stats[1],Stats[2],Stats[3],str(Stats[4]),str(Stats[5]),str(Stats[6]),str(Stats[7]),str(Stats[8]),str(Stats[9]),bool(Stats[10]),[attack1,attack2,attack3,attack4])
+    noneAttaque = moves.Move(0,"None","","",0,0,0)
+    attacks = [noneAttaque,noneAttaque,noneAttaque,noneAttaque]
 
-    return test_poke
+    for i in range(len(attacks)):
+        attackStats = attack()
+        attacks[i] = moves.Move(int(attackStats[0]),str(attackStats[1]),str(attackStats[3]),str(attackStats[4]),int(attackStats[5]),int(attackStats[6]),int(attackStats[7]))
+                        
+    outputPokemon = pokemon.Pokemon(int(Stats[0]),str(Stats[1]),str(Stats[2]),str(Stats[3]),int(Stats[5]),int(Stats[6]),int(Stats[7]),int(Stats[8]),int(Stats[9]),int(Stats[10]),int(Stats[11]),bool(Stats[12]),[attacks[0],attacks[1],attacks[2],attacks[3]])
+
+    return outputPokemon
 
 
 
