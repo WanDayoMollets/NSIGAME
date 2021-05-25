@@ -15,7 +15,7 @@ def CSV(id_poke):
     return(poke)
 
 def attack():
-    id_attack = random.randint(0,702)
+    id_attack = random.randint(1,702)
     with open('BDD/moves.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
@@ -28,8 +28,8 @@ def PokeCSV(id_poke):
     Stats = CSV(id_poke)
     
     stat = attack()
-    
-    attack1 = moves.Move(str(stat[0]),stat[1],stat[3],stat[4],str(stat[5]),str(stat[6]),str(stat[7]))
+    #suppr le % de précision
+    attack1 = moves.Move(int(stat[0]),str(stat[1]),str(stat[3]),str(stat[4]),int(stat[5]),int(stat[6]),int(stat[7]))
     stat = attack()
     
     attack2 = moves.Move(str(stat[0]),stat[1],stat[3],stat[4],str(stat[5]),str(stat[6]),str(stat[7]))

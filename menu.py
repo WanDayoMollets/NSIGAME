@@ -7,6 +7,7 @@ import threading
 import player
 import pokemon
 import moves
+import CSV_import
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -248,15 +249,11 @@ def tourIA():
     attaque = random.randint(0,3)
     print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} utilise {IA.get_currentPokemon().get_pokemon_move(attaque+1)}")
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
-    print(f"il reste {joueur.get_currentPokemon().get_hp()} à {joueur.get_currentPokemon().get_name()}")
-    time.sleep(1)
-    print(f"oof, ça fait mal")
     time.sleep(0.5)
 
 def tourJoueur(numAttaque):
-    print(f"vie de l'adversaire avant attaque : {IA.get_currentPokemon().get_hp()}")
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
-    print(f"vie de l'adversaire après attaque : {IA.get_currentPokemon().get_hp()}")
+    print(f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().get_pokemon_move(numAttaque)}")
 
 def tour(numAttaqueJoueur):
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
@@ -305,19 +302,23 @@ notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,False,[])
 
 def init_game():
     global joueur
+    """
     attaqueP1 = moves.Move(1,"attack1","feu","Special",100,100,15)
     attaqueP2 = moves.Move(2,"attack2","sol","Physical",100,100,10)
     attaqueP3 = moves.Move(2,"attack3","sol","Physical",80,100,10)
     attaqueP4 = moves.Move(2,"attack4","sol","Special",80,100,10)
+    """
     global lose
     lose = False
     #animation + explications du prof
     #input nom du joueur
     inputPlayer = "joueur test"
     #choix du starter
-    Pokemon1 = pokemon.Pokemon(12,"yes","feu","vol",55,60,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
+    """
+    Pokemon1 = pokemon.Pokemon(12,"yes","feu","vol",55,60,63,65,28,15,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
+    """
     Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
-    joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
+    joueur = player.Player(inputPlayer,[CSV_import.PokeCSV(random.randint(1,10)), Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
 
 
 #tests
@@ -330,6 +331,6 @@ attaqueP4 = moves.Move(2,"attack4","sol","Special",80,100,10)
 test = pokemon.Pokemon(12,"yes","feu","vol",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 test2 = pokemon.Pokemon(14,"no","feu","vol",68,35,65,36,35,13,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
 
-IA = player.Player("IA",[test2,test],[])
+IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,10)),CSV_import.PokeCSV(random.randint(1,10))],[])
 
 main_menu()
