@@ -8,6 +8,7 @@ import player
 import pokemon
 import moves
 import CSV_import
+import imageImport
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -117,11 +118,16 @@ def battle():
     running = True
     global IAlose
     IAlose = False
+    imageImport.importPokemonImage("charmander","joueur")
+    currentPokemon=pygame.image.load("cache/joueur/currentPokemon.png").convert_alpha()
     while running:
         screen.fill((0,0,0))
 
+
         if lose == True or IAlose == True:
             running = False
+
+        pygame.screen(currentPokemon,(0.2*x,0.3*y))
 
         mx, my = pygame.mouse.get_pos()
 
