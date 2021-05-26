@@ -48,8 +48,7 @@ def main_menu():
             if click:
                 #intro toussatoussa
                 init_game()
-                init_IA()
-                battle()
+                waiting_menu()
         options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
         #bouton options
         if options.collidepoint((mx,my)):
@@ -231,6 +230,62 @@ def attackMenu():
         pygame.display.update()
         mainClock.tick(60)
 
+def waiting_menu():
+    click = False
+    gameRunning = True
+    """Menu d'attente -> organiser son équipe"""
+    while gameRunning:
+        screen.fill((0,0,0))
+        if lose == True:
+            gameRunning = False
+        draw_text(f"Preparez votre equipe!", fontMenu, (255,255,255), screen, x*0.345,y*0.2)
+        draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (255,255,255), screen, x*0.345,y*0.3)
+
+        mx, my = pygame.mouse.get_pos()
+
+        next = pygame.Rect(x*0.2,y*0.5,x*0.2,y*0.125)
+        #bouton next
+        if next.collidepoint((mx,my)):
+            if click:
+                #prochain combat
+                joueur.save_team()
+                init_IA()
+                battle()
+                joueur.reset_team()
+                joueur.set_stage(joueur.get_stage()+1)
+        equipe = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
+        #bouton options
+        if equipe.collidepoint((mx,my)):
+            if click:
+                #ouvre l'équipe du joueur
+                pass
+        leave = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
+        #bouton quitter
+        if leave.collidepoint((mx,my)):
+            if click:
+                pygame.quit()
+                sys.exit()
+        #affiche tous les boutons et le texte
+        pygame.draw.rect(screen, (255,0,0), next)
+        pygame.draw.rect(screen, (255,0,0), equipe)
+        pygame.draw.rect(screen, (255,0,0), leave)
+        draw_text("Combat suivant", fontMenuChoice, (0,0,0), screen, x*0.27,y*0.55)
+        draw_text("Equipe", fontMenuChoice, (0,0,0), screen, x*0.66,y*0.55)
+        draw_text("Quitter", fontMenuChoice, (0,0,0), screen, x*0.9,y*0.925)
+
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        pygame.display.update()
+        mainClock.tick(60)
+
 def block_user_control(tourJeu):
     blockedCommand=True
     while blockedCommand:
@@ -254,8 +309,8 @@ def tourJoueur(numAttaque):
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
 
 def tour(numAttaqueJoueur):
-    print(joueur.get_currentPokemon().get_hp())
-    print(IA.get_currentPokemon().get_hp())
+    print(f"Vie du pokemon joueur : {joueur.get_currentPokemon().get_hp()}")
+    print(f"Vie du pokemon IA : {IA.get_currentPokemon().get_hp()}")
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
         tourJoueur(numAttaqueJoueur)
         if is_dead(IA.get_currentPokemon()):
@@ -312,12 +367,12 @@ def init_game():
     inputPlayer = "joueur test"
     #choix du starter
     Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
-    joueur = player.Player(inputPlayer,[CSV_import.PokeCSV(random.randint(1,50)), Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
+    joueur = player.Player(inputPlayer,[CSV_import.PokeCSV(random.randint(1,721)), Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
 def init_IA():
     global IA
-    IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,50)),CSV_import.PokeCSV(random.randint(1,50))],[])
+    IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,721)),CSV_import.PokeCSV(random.randint(1,721))],[])
     IA.update_team()
 
 

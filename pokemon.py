@@ -21,6 +21,12 @@ class Pokemon:
         self.sp_attack = Base_sp_attack
         self.sp_defense = Base_sp_defense
         self.speed = Base_speed
+        self.saved_hp = Base_hp
+        self.saved_attack = Base_attack
+        self.saved_defense = Base_defense
+        self.saved_sp_attack = Base_sp_attack
+        self.saved_sp_defense = Base_sp_defense
+        self.saved_speed = Base_speed
         self.level = 1
         self.legendary = legendary
         self.EV_hp = random.randint(1,255)
@@ -127,6 +133,24 @@ class Pokemon:
     def get_speed(self):
         return self.speed
     
+    def get_saved_hp(self):
+        return self.saved_hp
+
+    def get_saved_attack(self):
+        return self.saved_attack
+
+    def get_saved_defense(self):
+        return self.saved_defense
+
+    def get_saved_sp_attack(self):
+        return self.saved_sp_attack
+
+    def get_saved_sp_defense(self):
+        return self.saved_sp_defense
+
+    def get_saved_speed(self):
+        return self.saved_speed
+    
     def is_legendary(self):
         return self.legendary
     
@@ -195,6 +219,24 @@ class Pokemon:
 
     def set_speed(self,speed):
         self.speed = speed
+    
+    def set_saved_hp(self,hp):
+        self.saved_hp = hp
+
+    def set_saved_attack(self,attack):
+        self.saved_attack = attack
+
+    def set_saved_defense(self,defense):
+        self.saved_defense = defense
+
+    def set_saved_sp_attack(self,sp_attack):
+        self.saved_sp_attack = sp_attack
+
+    def set_saved_sp_defense(self,sp_defense):
+        self.saved_sp_defense = sp_defense
+
+    def set_saved_speed(self,speed):
+        self.saved_speed = speed
 
     def set_level(self,level):
         self.level = level
@@ -228,6 +270,22 @@ class Pokemon:
     def level_up(self,level):
         self.set_level(level)
         self.update_stats()
+    
+    def save_stats(self):
+        self.set_saved_hp(self.get_hp())
+        self.set_saved_attack(self.get_attack())
+        self.set_saved_defense(self.get_defense())
+        self.set_saved_sp_attack(self.get_sp_attack())
+        self.set_saved_sp_defense(self.get_sp_defense())
+        self.set_saved_speed(self.get_speed())
+    
+    def reset_stats(self):
+        self.set_hp(self.get_saved_hp())
+        self.set_attack(self.get_saved_attack())
+        self.set_defense(self.get_saved_defense())
+        self.set_sp_attack(self.get_saved_sp_attack())
+        self.set_sp_defense(self.get_saved_sp_defense())
+        self.set_speed(self.get_saved_speed())
     
     def damage(self, damage):
         self.hp -= damage

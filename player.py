@@ -1,3 +1,4 @@
+from pygame.image import save
 import pokemon
 import moves
 
@@ -49,4 +50,14 @@ class Player:
         for i in range(len(self.team)):
             if self.team[i].get_name() != "None":
                 self.team[i].update_stats()
+    
+    #save les stats du pokemon
+
+    def save_team(self):
+        for i in range(len(self.team)):
+            self.team[i].save_stats()
+    
+    def reset_team(self):
+        for i in range(len(self.team)):
+            self.team[i].reset_stats()
                  
