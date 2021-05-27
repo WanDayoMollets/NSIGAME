@@ -118,8 +118,10 @@ def battle():
     running = True
     global IAlose
     IAlose = False
-    imageImport.importPokemonImage("charmander","joueur")
-    currentPokemon=pygame.image.load("cache/joueur/currentPokemon.png").convert_alpha()
+    
+    image_update("joueur")
+    image_update("IA")
+
     while running:
         screen.fill((0,0,0))
 
@@ -127,7 +129,9 @@ def battle():
         if lose == True or IAlose == True:
             running = False
 
-        pygame.screen(currentPokemon,(0.2*x,0.3*y))
+        screen.blit(currentPokemonJoueur,(0.1*x,0.25*y))
+        screen.blit(currentPokemonIA,(0.6*x,0.1*y))
+        
 
         mx, my = pygame.mouse.get_pos()
 
@@ -345,6 +349,7 @@ def check_death():
             #L'IA envoie un autre pokemon, défini pour le moment
             IA.set_currentPokemon(IA.get_pokemon(2))
             print(f"{IA.get_name()} envoie {IA.get_currentPokemon().get_name()}")
+            image_update("IA")
     if is_dead(joueur.get_currentPokemon()):
         print(f"{joueur.get_currentPokemon().get_name()} est mort")
         joueur.set_pokemon(joueur.get_currentPokemon_position()+1,notPokemon)
@@ -355,6 +360,7 @@ def check_death():
         else:
             #choisir un autre pokemon
             pass
+            #image_update("joueur")
 
 def is_dead(pokemon):
     if pokemon.get_hp() <= 0:
@@ -380,6 +386,18 @@ def init_IA():
     global IA
     IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,721)),CSV_import.PokeCSV(random.randint(1,721))],[])
     IA.update_team()
+
+def image_update(player):
+    global currentPokemonJoueur
+    global currentPokemonIA
+    if player == "joueur":
+        imageImport.importPokemonImage(joueur.currentPokemon.get_name().lower(),player)
+        currentPokemonJoueur=pygame.image.load("cache/joueur/currentPokemon.png").convert_alpha()
+        currentPokemonJoueur=pygame.transform.scale(currentPokemonJoueur, (360, 360))
+    elif player == "IA":
+        imageImport.importPokemonImage(IA.currentPokemon.get_name().lower(),player)
+        currentPokemonIA=pygame.image.load("cache/IA/currentPokemon.png").convert_alpha()
+        currentPokemonIA=pygame.transform.scale(currentPokemonIA, (360, 360))
 
 
 
