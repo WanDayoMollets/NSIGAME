@@ -5,7 +5,7 @@ import sys
 import time
 import threading
 from dialogue import *
-from menu import draw_text
+
 
 
 from pygame.rect import Rect
@@ -49,6 +49,7 @@ def start():
         pygame.display.update()
         mainClock.tick(60)
 
+
 def prof():
     profIMG = pygame.image.load('Design/character/profchencrayon.png').convert_alpha()
     profIMG = pygame.transform.scale(profIMG, (900, 680))
@@ -73,15 +74,44 @@ def prof():
             if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-                        if p <= len(lines):
+                        if p <= len(lines):   
                             parlez(lines[p],300,800,1)
+                            if p == 2:
+                                name = demande()  
                             p+=1
 
 
-                            
+        
                         
 
         pygame.display.update()
         mainClock.tick(60)
+
+def demande():
+    while True:
+        screen.fill((0,0,0))
+        click = False
+        pygame.display.flip()
+        event = pygame.event.poll()
+        keys = pygame.key.get_pressed()
+
+        if len(key) == 1:
+            if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+                string += key.upper()
+            else:
+                pass
+                """https://www.reddit.com/r/pygame/comments/205i05/get_user_input/"""
+        
+        
+
+        if event.type == pygame.KEYDOWN:
+            key = pygame.key.name(event.key)
+        
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+    
 
 start()
