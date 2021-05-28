@@ -239,9 +239,6 @@ def attackMenu():
                 if event.key == pygame.K_KP5:
                     joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+5)
                     print(f"{joueur.get_currentPokemon().get_level()}")
-                if event.key == pygame.K_KP2:
-                    p = pokemon.Pokemon(28,"pokemonAdd","eau","psy",55,42,63,35,28,14,False,[attaqueP1,attaqueP2,attaqueP3,attaqueP4])
-                    joueur.set_pokemon(2,p)
 
         pygame.display.update()
         mainClock.tick(60)
@@ -307,15 +304,153 @@ def teamMenu(condition): #en combat ou pause
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-            if event.type == pygame.KEYDOWN:
-                #augmente de 1 lvl le pokemon actu
-                if event.key == pygame.K_KP1:
-                    joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+1)
-                    print(f"{joueur.get_currentPokemon().get_level()}")
-                #augmente de 5 lvl le pokemon actu
-                if event.key == pygame.K_KP5:
-                    joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+5)
-                    print(f"{joueur.get_currentPokemon().get_level()}")
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+def switchMenu(): 
+    """Menu de switch pokemon"""
+    click = False
+    global teamMenuRunning
+    switchMenuRunning = True
+    while switchMenuRunning:
+
+        mx, my = pygame.mouse.get_pos()
+
+        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+
+        Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
+        Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
+        Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
+        Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
+        Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
+        Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
+        if Poke1.collidepoint((mx,my)):
+            if click:
+                if joueur.team[0].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[0])
+                    joueur.set_pokemon(1,switchPokemon[0])
+                    switchMenuRunning = False
+        if Poke2.collidepoint((mx,my)):
+            if click:
+                if joueur.team[1].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[1])
+                    joueur.set_pokemon(2,switchPokemon[0])
+                    switchMenuRunning = False
+        if Poke3.collidepoint((mx,my)):
+            if click:
+                if joueur.team[2].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[2])
+                    joueur.set_pokemon(3,switchPokemon[0])
+                    switchMenuRunning = False
+        if Poke4.collidepoint((mx,my)):
+            if click:
+                if joueur.team[3].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[3])
+                    joueur.set_pokemon(4,switchPokemon[0])
+                    switchMenuRunning = False
+        if Poke5.collidepoint((mx,my)):
+            if click:
+                if joueur.team[4].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[4])
+                    joueur.set_pokemon(5,switchPokemon[0])
+                    switchMenuRunning = False
+        if Poke6.collidepoint((mx,my)):
+            if click:
+                if joueur.team[5].get_name() == switchPokemon[0].get_name():
+                    switchMenuRunning = False
+                else:
+                    joueur.set_pokemon(switchPokemon[1],joueur.team[5])
+                    joueur.set_pokemon(6,switchPokemon[0])
+                    switchMenuRunning = False
+        #affiche tous les boutons et le texte
+        pygame.draw.rect(screen, (255,255,255),menuBackground)
+        pygame.draw.rect(screen, (0,255,0), Poke1)
+        pygame.draw.rect(screen, (0,255,0), Poke2)
+        pygame.draw.rect(screen, (0,255,0), Poke3)
+        pygame.draw.rect(screen, (0,255,0), Poke4)
+        pygame.draw.rect(screen, (0,255,0), Poke5)
+        pygame.draw.rect(screen, (0,255,0), Poke6)
+        draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
+        display_pokemon_in_menu()
+
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+def selectPokemon_AfterDeath(): 
+    """Menu de selection pokemon après une mort"""
+    click = False
+    deathMenuRunning = True
+    while deathMenuRunning:
+
+        mx, my = pygame.mouse.get_pos()
+
+        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+
+        Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
+        Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
+        Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
+        Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
+        Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
+        Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
+        if Poke1.collidepoint((mx,my)):
+            if click:
+                pass
+        if Poke2.collidepoint((mx,my)):
+            if click:
+                pass
+        if Poke3.collidepoint((mx,my)):
+            if click:
+                pass
+        if Poke4.collidepoint((mx,my)):
+            if click:
+                pass
+        if Poke5.collidepoint((mx,my)):
+            if click:
+                pass
+        if Poke6.collidepoint((mx,my)):
+            if click:
+                pass
+        #affiche tous les boutons et le texte
+        pygame.draw.rect(screen, (255,255,255),menuBackground)
+        pygame.draw.rect(screen, (0,255,0), Poke1)
+        pygame.draw.rect(screen, (0,255,0), Poke2)
+        pygame.draw.rect(screen, (0,255,0), Poke3)
+        pygame.draw.rect(screen, (0,255,0), Poke4)
+        pygame.draw.rect(screen, (0,255,0), Poke5)
+        pygame.draw.rect(screen, (0,255,0), Poke6)
+        draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
+        display_pokemon_in_menu()
+
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 
         pygame.display.update()
         mainClock.tick(60)
@@ -347,14 +482,27 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
         
         if switch.collidepoint((mx,my)):
             if click:
-                if condition == "battle":
-                    switchPokemon = joueur.get_currentPokemon()
+                if condition == "battle" and joueur.get_currentPokemon().get_name() == joueur.team[pokemonNb-1].get_name():
+                    print(f"{joueur.get_currentPokemon().get_name()} est déjà en combat")
+                    select_pokemonRunning = False
+                elif condition == "battle" and joueur.team[pokemonNb-1].get_name() == "None":
+                    print("Ceci n'est pas un pokémon")
+                elif condition == "battle":
                     joueur.set_currentPokemon(joueur.team[pokemonNb-1])
-                    joueur.set_pokemon(pokemonNb,switchPokemon)
                     image_update("joueur")
+                    IA_tour = threading.Thread(target = tourIA(), args = ())
+                    IA_tour.start()
+                    block_user_control(IA_tour)
                     global teamMenuRunning
                     teamMenuRunning = False
                     select_pokemonRunning = False
+                elif condition == "pause":
+                    global switchPokemon
+                    switchPokemon = [joueur.team[pokemonNb-1],pokemonNb] #Pokemon / position dans la team
+                    switchMenu()
+                    joueur.set_currentPokemon(joueur.get_pokemon(1))
+                    select_pokemonRunning = False
+                    
                     
         
         click = False
@@ -399,7 +547,7 @@ def waiting_menu():
         if equipe.collidepoint((mx,my)):
             if click:
                 #ouvre l'équipe du joueur
-                pass
+                teamMenu("pause")
         leave = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
         #bouton quitter
         if leave.collidepoint((mx,my)):
@@ -427,12 +575,12 @@ def waiting_menu():
         pygame.display.update()
         mainClock.tick(60)
 
-def block_user_control(tourJeu):
+def block_user_control(wait):
     blockedCommand=True
     while blockedCommand:
         blockMenu = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         pygame.draw.rect(screen, (255,255,255),blockMenu)
-        if not tourJeu.is_alive():
+        if not wait.is_alive():
             blockedCommand = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -478,7 +626,9 @@ def check_death():
             #fin combat
         else:
             #L'IA envoie un autre pokemon, défini pour le moment
-            IA.set_currentPokemon(IA.get_pokemon(2))
+            for i in range(len(IA.team)):
+                if IA.get_pokemon(i+1).get_name() != "None":
+                    IA.set_currentPokemon(IA.get_pokemon(i+1))
             print(f"{IA.get_name()} envoie {IA.get_currentPokemon().get_name()}")
             image_update("IA")
     if is_dead(joueur.get_currentPokemon()):
@@ -489,9 +639,8 @@ def check_death():
             global lose
             lose = True
         else:
-            #choisir un autre pokemon
-            pass
-            #image_update("joueur")
+            selectPokemon_AfterDeath()
+            image_update("joueur")
 
 def is_dead(pokemon):
     if pokemon.get_hp() <= 0:
@@ -512,11 +661,11 @@ def init_game():
     Pokemon1 = CSV_import.PokeCSV(random.randint(1,721))
     Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
     Pokemon2 = CSV_import.PokeCSV(random.randint(1,721))
-    Pokemon6 = CSV_import.PokeCSV(random.randint(1,721))
+    Pokemon3 = CSV_import.PokeCSV(random.randint(1,721))
     joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
-def init_IA():
+def init_IA(): #IAtype wild / trainer / etc...
     global IA
     IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,721)),CSV_import.PokeCSV(random.randint(1,721))],[])
     IA.update_team()

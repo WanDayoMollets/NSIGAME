@@ -2,6 +2,8 @@ import requests
 import shutil
 
 def importPokemonImage(pokemonName,playerType):
+    replaceChar = " "
+    pokemonName = pokemonName.replace(replaceChar,"-")
     if playerType == "joueur":
         image_url = "https://img.pokemondb.net/sprites/black-white/back-normal/"+pokemonName+".png"
     elif playerType == "IA":
