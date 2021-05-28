@@ -88,25 +88,39 @@ def prof():
         mainClock.tick(60)
 
 def demande():
-    while True:
-        screen.fill((0,0,0))
+    string = ""
+    screen.fill((0,0,0))
+    a = True
+    while a:
+        
         click = False
         pygame.display.flip()
-        event = pygame.event.poll()
-        keys = pygame.key.get_pressed()
-
-        if len(key) == 1:
-            if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-                string += key.upper()
-            else:
-                pass
-                """https://www.reddit.com/r/pygame/comments/205i05/get_user_input/"""
         
         
 
-        if event.type == pygame.KEYDOWN:
-            key = pygame.key.name(event.key)
+        for event in pygame.event.get():
+            keys = pygame.key.get_pressed()
+            if event.type == pygame.KEYDOWN:
+                key = pygame.key.name(event.key)
+                print(key)
+                if len(key) == 1:
+                    if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+                        string += key.upper()
+                    else:
+                        string += key
+                elif key == "backspace":
+                    string = string[:len(string) - 1]
+                elif event.key == pygame.K_RETURN and len(string) > 3:
+                    print(string)
+                    a= False
+            
+        draw_text("Ton nom :", fontMenuChoice, (255,255,255), screen, 540,550)
+        draw_text(string, fontMenuChoice, (255,255,255), screen, 540,630)
         
+        
+        pygame.display.update()
+        mainClock.tick(60)
+
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
