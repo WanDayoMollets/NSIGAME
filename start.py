@@ -51,19 +51,21 @@ def start():
 
 
 def prof():
+    bgp = pygame.image.load('Design/Interface/profHouse.png')
     profIMG = pygame.image.load('Design/character/profchencrayon.png').convert_alpha()
-    profIMG = pygame.transform.scale(profIMG, (900, 680))
+    profIMG = pygame.transform.scale(profIMG, (700, 500))
     box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
+    box = pygame.transform.scale(box, (800, 500))
     p = 0
     lines = []
     with open('prof.txt') as f:
         lines = f.readlines()
     
     while True:
-        screen.fill((0,0,0))
+        screen.blit(bgp, (0, 0))
         click = False
-        screen.blit(profIMG,(200,-50))
-        screen.blit(box,(0,400))
+        screen.blit(profIMG,(-200,00))
+        screen.blit(box,(240,580))
         pygame.display.flip()
         
         
@@ -74,15 +76,31 @@ def prof():
             if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-                        if p <= len(lines):   
+                        while p <= len(lines):
+                            screen.blit(box,(240,580))
+                            draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
                             parlez(lines[p],300,800,1)
+                    
                             if p == 2:
-                                name = demande()  
+                                screen.blit(box,(240,580))
+                                name = demande()
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                
+                            if p == 4:
+                                screen.blit(box,(240,580))
+                                dresseur = choix()
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                dresseurR = pygame.transform.flip(dresseur, True, False)
+                                screen.blit(dresseurR,(845,200))
+                                
                             p+=1
 
 
         
-                        
+        draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
+        draw_text("Clique pour parlez", fontMenuChoice, (0,0,0), screen, 310,800)
 
         pygame.display.update()
         mainClock.tick(60)
@@ -91,33 +109,45 @@ def demande():
     string = ""
     screen.fill((0,0,0))
     a = True
+    b = False
+    box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
+    box = pygame.transform.scale(box, (800, 500))
     while a:
-        
+        screen.blit(box,(240,200))
         click = False
         pygame.display.flip()
         
-        
+        draw_text("Ton nom :", fontMenuChoice, (0,0,0), screen, 330,330)
+        draw_text("Entre 3 et 12 caractères | Entrez pour valider", fontMenuChoice, (255,255,255), screen, 420,590)
+        while b is False:
+            for event in pygame.event.get():
 
-        for event in pygame.event.get():
-            keys = pygame.key.get_pressed()
-            if event.type == pygame.KEYDOWN:
-                key = pygame.key.name(event.key)
-                print(key)
-                if len(key) == 1:
-                    if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-                        string += key.upper()
-                    else:
-                        string += key
-                elif key == "backspace":
-                    string = string[:len(string) - 1]
-                elif event.key == pygame.K_RETURN and len(string) > 3:
-                    print(string)
-                    a= False
+                keys = pygame.key.get_pressed()
+                if event.type == pygame.KEYDOWN:
+                    key = pygame.key.name(event.key)
+                    print(key)
+                    if len(key) == 1:
+                        if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+                            string += key.upper()
+                        else:
+                            string += key
+                    elif key == "backspace":
+                        string = string[:len(string) - 1]
+                        print(string)
+                        screen.blit(box,(240,200))
+                        draw_text("Ton nom :", fontMenuChoice, (0,0,0), screen, 330,330)
+                        draw_text("Entre 3 et 12 caractères | Entrez pour valider", fontMenuChoice, (255,255,255), screen, 420,590)
+                    elif event.key == pygame.K_RETURN and len(string) > 3 and len(string) < 12:
+                        print(string)
+                        b= True
+                        a= False
+                        
             
-        draw_text("Ton nom :", fontMenuChoice, (255,255,255), screen, 540,550)
-        draw_text(string, fontMenuChoice, (255,255,255), screen, 540,630)
+                draw_text(string, fontMenu, (0,0,0), screen, 460,450)
         
         
+            pygame.display.update()
+            mainClock.tick(60)
         pygame.display.update()
         mainClock.tick(60)
 
@@ -126,6 +156,45 @@ def demande():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-    
+def choix():
+    screen.fill((0,0,0))
+    dresseur1 = pygame.image.load('Design/character/trainer1.png').convert_alpha()
+    dresseur1 = pygame.transform.scale(dresseur1, (700, 500))
+    dresseur2 = pygame.image.load('Design/character/trainer2.png').convert_alpha()
+    dresseur2 = pygame.transform.scale(dresseur2, (700, 500))
+    button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+    button1 = pygame.transform.scale(button1, (500, 300))
+    button2 = pygame.image.load('Design/interface/greenClick.png').convert_alpha()
+    button2 = pygame.transform.scale(button2, (500, 300))
+    a = True
+    screen.blit(dresseur1,(0,150))
+    screen.blit(dresseur2,(400,150))
+    b1 = screen.blit(button1,(190,610))
+    b2 = screen.blit(button2,(600,610))
+    draw_text("CAMPAGNARD", fontMenuChoice, (207,33,33), screen, 370,750)
+    draw_text("RACAILLE", fontMenuChoice, (66, 174, 70), screen, 800,750)
+    click = False
+    time.sleep(0.1)
+    while a:
+        mx, my = pygame.mouse.get_pos()
+        pygame.display.update()
+        mainClock.tick(60)
+        if b1.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('Red player')
+                return dresseur1
+        if b2.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('Green player')
+                return dresseur2
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 start()
