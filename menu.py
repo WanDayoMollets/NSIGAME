@@ -19,9 +19,10 @@ x,y=1280,960
 window_resolution = (x,y)
 launched = True
 mainClock = pygame.time.Clock()
+screen = pygame.display.set_mode(window_resolution)
 pygame.init()
 pygame.display.set_caption("Nomékop")
-screen = pygame.display.set_mode(window_resolution)
+
 fontMenu = pygame.font.SysFont(None, 100)
 fontMenuChoice = pygame.font.SysFont(None, 30)
 click = False
@@ -537,7 +538,7 @@ def waiting_menu():
             if click:
                 #prochain combat
                 joueur.save_team()
-                init_IA()
+                init_IA("wild")
                 battle()
                 joueur.reset_team()
                 joueur.update_team()
@@ -658,16 +659,22 @@ def init_game():
     #input nom du joueur
     inputPlayer = "joueur test"
     #choix du starter
-    Pokemon1 = CSV_import.PokeCSV(random.randint(1,721))
+    Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
     Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
-    Pokemon2 = CSV_import.PokeCSV(random.randint(1,721))
-    Pokemon3 = CSV_import.PokeCSV(random.randint(1,721))
+    Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
+    Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
     joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
-def init_IA(): #IAtype wild / trainer / etc...
+def init_IA(typeIA): #IAtype wild / trainer / etc...
     global IA
-    IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,721)),CSV_import.PokeCSV(random.randint(1,721))],[])
+    if typeIA == "start":
+        IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
+    elif typeIA == "wild":
+        IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649))],[])
+    elif typeIA == "trainer":
+        IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
+    IA.team[0].level_up(10)
     IA.update_team()
 
 def image_update(player):
