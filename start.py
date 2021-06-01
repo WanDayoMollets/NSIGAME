@@ -91,6 +91,7 @@ def prof():
                                 name = demande()
                                 screen.blit(bgp, (0, 0))
                                 screen.blit(profIMG,(-200,00))
+                                    
                                 
                             if p == 4:
                                 screen.blit(box,(240,580))
@@ -124,7 +125,8 @@ def prof():
 
 def demande():
     string = ""
-    screen.fill((0,0,0))
+    bgn = pygame.image.load('Design/Interface/Backname.png')
+    screen.blit(bgn, (0, 0))
     a = True
     b = False
     box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
@@ -174,7 +176,8 @@ def demande():
                 pygame.quit()
                 sys.exit()
 def choix():
-    screen.fill((0,0,0))
+    bgn = pygame.image.load('Design/Interface/BackVS.png')
+    screen.blit(bgn, (0, 0))
     dresseur1 = pygame.image.load('Design/character/trainer1.png').convert_alpha()
     dresseur1 = pygame.transform.scale(dresseur1, (700, 500))
     dresseur2 = pygame.image.load('Design/character/trainer2.png').convert_alpha()
