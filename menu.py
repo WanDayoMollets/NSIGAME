@@ -45,7 +45,7 @@ def start():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    prof()
+                    main_menu()
                     
                     
 
@@ -94,6 +94,8 @@ def prof():
                                 joueur.set_name(name)
                                 screen.blit(bgp, (0, 0))
                                 screen.blit(profIMG,(-200,00))
+                                with open('prof.txt') as f:
+                                    lines = f.readlines()
                                     
                                 
                             if p == 4:
@@ -106,18 +108,20 @@ def prof():
                                 screen.blit(dresseurR,(845,200))
                             if p ==6:
                                 global Poke
-                                Poke = choixP()
+                                choixP()
                                 screen.blit(box,(240,580))
                                 screen.blit(bgp, (0, 0))
                                 screen.blit(profIMG,(-200,00))
                                 screen.blit(dresseurR,(845,200))
+                                
                             if p > 7:
                                 draw_text("Press", fontMenuChoice, (128,128,128), screen, 1045,850)
                                 draw_text("Space", fontMenuChoice, (128,128,128), screen, 1045,870)
                                 draw_text("To", fontMenuChoice, (128,128,128), screen, 1045,890)
                                 draw_text("Skip", fontMenuChoice, (128,128,128), screen, 1045,910)
                     
-                                
+                            if p >= len(lines):
+                                waiting_menu()
                             p+=1
 
         draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
@@ -163,6 +167,16 @@ def demande():
                         print(string)
                         b= True
                         a= False
+                        with open("prof.txt", "r") as p:
+                            lines = p.readlines()
+                            with open("prof.txt", "w") as p:
+                                for line in lines:
+                                    if "Bonne chance" not in line:
+                                        p.write(line)
+
+                        txtP = open("prof.txt","a")
+                        txtP.write("Bonne chance "+ str(string)+" !\n")
+                        txtP.close()
                         
             
                 draw_text(string, fontMenu, (0,0,0), screen, 460,450)
@@ -256,21 +270,21 @@ def choixP():
                 click = False
                 print('NomeKop2')
                 joueur.set_pokemon(1,IA.team[1])
-                waiting_menu()
+                a = False
                 
         if b2.collidepoint((mx,my)):
             if click:
                 click = False
                 print('NomeKop3')
                 joueur.set_pokemon(1,IA.team[2])
-                waiting_menu()
+                a = False
                 
         if b3.collidepoint((mx,my)):
             if click:
                 click = False
                 print('NomeKop1')
                 joueur.set_pokemon(1,IA.team[0])
-                waiting_menu()
+                a = False
         
         click = False
                 
@@ -302,7 +316,7 @@ def main_menu():
         if play.collidepoint((mx,my)):
             if click:
                 init_game()
-                start()
+                prof()
         options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
         #bouton options
         if options.collidepoint((mx,my)):
@@ -961,4 +975,4 @@ def display_pokemon_in_menu():
 
 
 
-main_menu()
+start()

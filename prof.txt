@@ -1,6 +1,6 @@
 Salutation mon cher amis !
 Je suis le Prof Brindille, l'unique !
-Mais dis moi, quel est ton nom ?
+Mais dis moi, quel est ton nomc'est quoi ton petit nom ?
 Oh... tes parents ont étaient durs, j'en suis désolé...
 Je suis aveugle, dis moi à quoi tu ressemble.
 C'est pas si mal d'être aveugle au final...
@@ -22,5 +22,4 @@ Le seul moyen de s'en débarraser est donc la mort, c'est bien plus moral !
 Si toutes ton équipe est morte, c'est la fin de l'aventure pour toi !
 Voilà ! Sortez une copie, interro surprise !
 Je rigole, je te laisse partir à l'aventure (et faire mes courses) !
-
-
+Bonne chance lolo !
