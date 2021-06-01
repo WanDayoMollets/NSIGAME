@@ -111,12 +111,10 @@ def prof():
                                 draw_text("Space", fontMenuChoice, (128,128,128), screen, 1045,870)
                                 draw_text("To", fontMenuChoice, (128,128,128), screen, 1045,890)
                                 draw_text("Skip", fontMenuChoice, (128,128,128), screen, 1045,910)
-                                
+                    
                                 
                             p+=1
 
-
-        
         draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
         draw_text("Clique pour parlez", fontMenuChoice, (0,0,0), screen, 310,800)
 
@@ -219,7 +217,8 @@ def choix():
                     click = True
 
 def choixP():
-    screen.fill((0,0,0))
+    bgc = pygame.image.load('Design/Interface/choix.png')
+    screen.blit(bgc, (0, 0))
     a = True
     button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
     button1 = pygame.transform.scale(button1, (500, 300))
@@ -227,9 +226,9 @@ def choixP():
     button2 = pygame.transform.scale(button2, (500, 300))
     button3 = pygame.image.load('Design/interface/blueClick.png').convert_alpha()
     button3 = pygame.transform.scale(button3, (500, 300))
-    b1 = screen.blit(button1,(400,610))
-    b2 = screen.blit(button2,(800,610))
-    b3 = screen.blit(button3,(0,610))
+    b1 = screen.blit(button1,(400,650))
+    b2 = screen.blit(button2,(800,650))
+    b3 = screen.blit(button3,(0,650))
     click = False
     while a:
 
