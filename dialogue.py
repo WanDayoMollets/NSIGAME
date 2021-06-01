@@ -34,9 +34,7 @@ def parlez(texte,x,y,color):
     a = True
     b= True
     i=0
-    
     while a:
-        
         mx, my = pygame.mouse.get_pos()
 
         if b:
@@ -47,8 +45,9 @@ def parlez(texte,x,y,color):
             time.sleep(0.03)
         if not b:
             if event.type == MOUSEBUTTONDOWN:
-                    if click:
-                        a = False
+                if click:
+                    a = False
+                    click = False
             
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:

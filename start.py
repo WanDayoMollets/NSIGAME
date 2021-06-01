@@ -4,7 +4,9 @@ import os
 import sys
 import time
 import threading
+import menu
 from dialogue import *
+import threading
 
 
 
@@ -56,6 +58,8 @@ def prof():
     profIMG = pygame.transform.scale(profIMG, (700, 500))
     box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
     box = pygame.transform.scale(box, (800, 500))
+    skip = pygame.image.load('Design/Interface/Backreturn.png').convert_alpha()
+    skip = pygame.transform.scale(skip, (80, 80))
     p = 0
     lines = []
     with open('prof.txt') as f:
@@ -69,6 +73,7 @@ def prof():
         pygame.display.flip()
         
         
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -76,7 +81,7 @@ def prof():
             if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-                        while p <= len(lines):
+                        while p < len(lines):
                             screen.blit(box,(240,580))
                             draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
                             parlez(lines[p],300,800,1)
@@ -94,6 +99,18 @@ def prof():
                                 screen.blit(profIMG,(-200,00))
                                 dresseurR = pygame.transform.flip(dresseur, True, False)
                                 screen.blit(dresseurR,(845,200))
+                            if p ==6:
+                                Poke = choixP()
+                                screen.blit(box,(240,580))
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                screen.blit(dresseurR,(845,200))
+                            if p > 7:
+                                draw_text("Press", fontMenuChoice, (128,128,128), screen, 1045,850)
+                                draw_text("Space", fontMenuChoice, (128,128,128), screen, 1045,870)
+                                draw_text("To", fontMenuChoice, (128,128,128), screen, 1045,890)
+                                draw_text("Skip", fontMenuChoice, (128,128,128), screen, 1045,910)
+                                
                                 
                             p+=1
 
@@ -197,4 +214,61 @@ def choix():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+def choixP():
+    screen.fill((0,0,0))
+    a = True
+    button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+    button1 = pygame.transform.scale(button1, (500, 300))
+    button2 = pygame.image.load('Design/interface/greenClick.png').convert_alpha()
+    button2 = pygame.transform.scale(button2, (500, 300))
+    button3 = pygame.image.load('Design/interface/blueClick.png').convert_alpha()
+    button3 = pygame.transform.scale(button3, (500, 300))
+    b1 = screen.blit(button1,(400,610))
+    b2 = screen.blit(button2,(800,610))
+    b3 = screen.blit(button3,(0,610))
+    click = False
+    while a:
+
+        mx, my = pygame.mouse.get_pos()
+        pygame.display.update()
+        mainClock.tick(60)
+        
+        if b1.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop2')
+                break
+                
+        if b2.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop3')
+        if b3.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop1')
+                
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+def space():
+    a = True
+    while a:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                print('es')
+                key = pygame.key.name(event.key)
+                if key == "backspace":
+                    print('10')
+                    a = False
+                    return True
+                else :
+                    return False
+        
 start()
