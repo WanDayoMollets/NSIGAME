@@ -247,10 +247,13 @@ def choixP():
             if click:
                 click = False
                 print('NomeKop3')
+                
         if b3.collidepoint((mx,my)):
             if click:
                 click = False
                 print('NomeKop1')
+        
+        click = False
                 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

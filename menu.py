@@ -9,6 +9,7 @@ import pokemon
 import moves
 import CSV_import
 import imageImport
+import start
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -655,14 +656,12 @@ def init_game():
     global joueur
     global lose
     lose = False
-    #animation + explications du prof
-    #input nom du joueur
-    inputPlayer = "joueur test"
-    #choix du starter
-    Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
+    inputPlayer, dresseur, Pokemon1 = start.start()
+    #inputPlayer = "joueur test"
+    #Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
     Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
-    Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
-    Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
+    #Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
+    #Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
     joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
@@ -710,4 +709,5 @@ def display_pokemon_in_menu():
 
 
 
-main_menu()
+
+#main_menu()
