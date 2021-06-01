@@ -45,7 +45,8 @@ def start():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    main_menu()
+                    init_game()
+                    prof()
                     
                     
 
@@ -119,10 +120,11 @@ def prof():
                                 draw_text("Space", fontMenuChoice, (128,128,128), screen, 1045,870)
                                 draw_text("To", fontMenuChoice, (128,128,128), screen, 1045,890)
                                 draw_text("Skip", fontMenuChoice, (128,128,128), screen, 1045,910)
-                    
-                            if p >= len(lines):
-                                waiting_menu()
+                                
                             p+=1
+                    
+        if p >= len(lines):
+            waiting_menu()
 
         draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
         draw_text("Clique pour parlez", fontMenuChoice, (0,0,0), screen, 310,800)
@@ -303,51 +305,6 @@ def draw_text(text,font,color,surface,x,y):
     textrect.topleft = (x,y)
     surface.blit(textobj, textrect)
 
-def main_menu():
-    """Menu principal -> Jouer, Options, Quitter"""
-    while True:
-        screen.fill((0,0,0))
-        draw_text("Nomékop", fontMenu, (255,255,255), screen, x*0.345,y*0.2)
-
-        mx, my = pygame.mouse.get_pos()
-
-        play = pygame.Rect(x*0.2,y*0.5,x*0.2,y*0.125)
-        #bouton jouer
-        if play.collidepoint((mx,my)):
-            if click:
-                init_game()
-                prof()
-        options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
-        #bouton options
-        if options.collidepoint((mx,my)):
-            if click:
-                optionsMenu()
-        leave = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
-        #bouton quitter
-        if leave.collidepoint((mx,my)):
-            if click:
-                pygame.quit()
-                sys.exit()
-        #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,0,0), play)
-        pygame.draw.rect(screen, (255,0,0), options)
-        pygame.draw.rect(screen, (255,0,0), leave)
-        draw_text("Jouer", fontMenuChoice, (0,0,0), screen, x*0.27,y*0.55)
-        draw_text("Options", fontMenuChoice, (0,0,0), screen, x*0.66,y*0.55)
-        draw_text("Quitter", fontMenuChoice, (0,0,0), screen, x*0.9,y*0.925)
-
-        click = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-
-        pygame.display.update()
-        mainClock.tick(60)
     
 def optionsMenu():
     """Menu des options"""
