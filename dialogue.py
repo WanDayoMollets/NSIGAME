@@ -61,7 +61,7 @@ def parlez(texte,x,y,color):
         mainClock.tick(60)
 
 def texteP(texte,i,x,y,c):
-        draw_text(texte[:i], fontMenuChoice, c, screen, x,y)
+        draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
 
 #test
 """
