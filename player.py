@@ -2,6 +2,9 @@ from pygame.image import save
 import pokemon
 import moves
 
+
+notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,0,False,[])
+
 class Player:
 
     def __init__(self,playerName : str,team : list,bag : list,stage=1):
@@ -63,4 +66,10 @@ class Player:
     def reset_team(self):
         for i in range(len(self.team)):
             self.team[i].reset_stats()
-                 
+
+    def sort_team(self):
+        for i in range(len(self.team)-1):
+            if self.team[i].get_name() == "None":
+                self.team[i] = self.team[i+1]
+                self.team[i+1] = notPokemon
+        self.team[5] = notPokemon

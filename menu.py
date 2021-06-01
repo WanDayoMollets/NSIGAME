@@ -666,10 +666,10 @@ def selectPokemon_AfterDeath():
     click = False
     deathMenuRunning = True
     while deathMenuRunning:
-
+        
         mx, my = pygame.mouse.get_pos()
 
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+        
 
         Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
         Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
@@ -682,7 +682,7 @@ def selectPokemon_AfterDeath():
                 pass
         if Poke2.collidepoint((mx,my)):
             if click:
-                pass
+                select_pokemon(2,"battle")
         if Poke3.collidepoint((mx,my)):
             if click:
                 pass
@@ -696,13 +696,14 @@ def selectPokemon_AfterDeath():
             if click:
                 pass
         #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
+        
         pygame.draw.rect(screen, (0,255,0), Poke1)
         pygame.draw.rect(screen, (0,255,0), Poke2)
         pygame.draw.rect(screen, (0,255,0), Poke3)
         pygame.draw.rect(screen, (0,255,0), Poke4)
         pygame.draw.rect(screen, (0,255,0), Poke5)
         pygame.draw.rect(screen, (0,255,0), Poke6)
+        
         draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
         display_pokemon_in_menu()
 
@@ -716,8 +717,10 @@ def selectPokemon_AfterDeath():
                 if event.button == 1:
                     click = True
 
-        pygame.display.update()
+        #pygame.display.update()
         mainClock.tick(60)
+        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+        pygame.draw.rect(screen, (255,255,255),menuBackground)
 
 def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mort (battle,pause)
     click = False
@@ -802,6 +805,7 @@ def waiting_menu():
                 #prochain combat
                 joueur.save_team()
                 init_IA("wild")
+                IA.team[0].level_up(10)
                 battle()
                 joueur.reset_team()
                 joueur.update_team()
@@ -902,6 +906,7 @@ def check_death():
             global lose
             lose = True
         else:
+            joueur.sort_team()
             selectPokemon_AfterDeath()
             image_update("joueur")
 
@@ -922,7 +927,7 @@ def init_game():
     #Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
     Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
     #Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
-    #Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
+    Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
     joueur = player.Player("notDefined",[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
@@ -934,7 +939,6 @@ def init_IA(typeIA): #IAtype wild / trainer / etc...
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649))],[])
     elif typeIA == "trainer":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
-    IA.team[0].level_up(10)
     IA.update_team()
 
 def image_update(player):
