@@ -13,6 +13,9 @@ class Player:
 
     def get_name(self):
         return self.playerName
+    
+    def set_name(self, name):
+        self.playerName = name
 
     def get_pokemon(self,nb):
         return self.team[nb-1]

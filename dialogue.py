@@ -61,41 +61,7 @@ def parlez(texte,x,y,color):
         mainClock.tick(60)
 
 def texteP(texte,i,x,y,c):
-        draw_text(texte[:i], fontMenuChoice, c, screen, x,y)
-
-#test
-"""
-def main():    
-    while True:
-        screen.fill((0,0,0))
-        draw_text("Prof Chen", fontMenu, (255,255,255), screen, x*0.345,y*0.2)
+        draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
     
-        mx, my = pygame.mouse.get_pos()
-
-        dialogue = pygame.Rect(x*0.2,y*0.5,x*0.2,y*0.125)
-        if dialogue.collidepoint((mx,my)):
-            if click:
-                parlez(texte,300,400)
-        pygame.draw.rect(screen, (255,0,0), dialogue)
-        draw_text("Parlez", fontMenuChoice, (255,255,255), screen, x*0.27,y*0.55)
-
-        click = False
-    
-        for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        click = True
-                        
-        pygame.display.update()
-        mainClock.tick(60)
-
-
-texte= 'Salut petite merde !'
-main()
-        
-"""        
 
     

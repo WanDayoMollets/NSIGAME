@@ -9,7 +9,7 @@ import pokemon
 import moves
 import CSV_import
 import imageImport
-import start
+from dialogue import *
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -30,6 +30,258 @@ click = False
 lose = False
 IAlose = False 
 
+def start():
+    bg = pygame.image.load('Design/Interface/BackGroundLogo.png')
+    while True:
+        
+        pygame.display.flip()
+        screen.blit(bg, (0, 0))
+        draw_text("Press space to continue", fontMenuChoice, (80,150,200), screen, 540,630)
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    prof()
+                    
+                    
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+
+def prof():
+    bgp = pygame.image.load('Design/Interface/profHouse.png')
+    profIMG = pygame.image.load('Design/character/profchencrayon.png').convert_alpha()
+    profIMG = pygame.transform.scale(profIMG, (700, 500))
+    box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
+    box = pygame.transform.scale(box, (800, 500))
+    skip = pygame.image.load('Design/Interface/Backreturn.png').convert_alpha()
+    skip = pygame.transform.scale(skip, (80, 80))
+    p = 0
+    lines = []
+    with open('prof.txt') as f:
+        lines = f.readlines()
+    
+    while True:
+        screen.blit(bgp, (0, 0))
+        click = False
+        screen.blit(profIMG,(-200,00))
+        screen.blit(box,(240,580))
+        pygame.display.flip()
+        
+        
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        click = True
+                        while p < len(lines):
+                            screen.blit(box,(240,580))
+                            draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
+                            parlez(lines[p],300,800,1)
+                    
+                            if p == 2:
+                                screen.blit(box,(240,580))
+                                global name
+                                name = demande()
+                                joueur.set_name(name)
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                    
+                                
+                            if p == 4:
+                                screen.blit(box,(240,580))
+                                global dresseur
+                                dresseur = choix()
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                dresseurR = pygame.transform.flip(dresseur, True, False)
+                                screen.blit(dresseurR,(845,200))
+                            if p ==6:
+                                global Poke
+                                Poke = choixP()
+                                screen.blit(box,(240,580))
+                                screen.blit(bgp, (0, 0))
+                                screen.blit(profIMG,(-200,00))
+                                screen.blit(dresseurR,(845,200))
+                            if p > 7:
+                                draw_text("Press", fontMenuChoice, (128,128,128), screen, 1045,850)
+                                draw_text("Space", fontMenuChoice, (128,128,128), screen, 1045,870)
+                                draw_text("To", fontMenuChoice, (128,128,128), screen, 1045,890)
+                                draw_text("Skip", fontMenuChoice, (128,128,128), screen, 1045,910)
+                    
+                                
+                            p+=1
+
+        draw_text("Pr. Brindille", fontMenuChoice, (0,0,0), screen, 310,710)
+        draw_text("Clique pour parlez", fontMenuChoice, (0,0,0), screen, 310,800)
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+def demande():
+    string = ""
+    bgn = pygame.image.load('Design/Interface/Backname.png')
+    screen.blit(bgn, (0, 0))
+    a = True
+    b = False
+    box = pygame.image.load('Design/Interface/DialogueBox.png').convert_alpha()
+    box = pygame.transform.scale(box, (800, 500))
+    while a:
+        screen.blit(box,(240,200))
+        click = False
+        pygame.display.flip()
+        
+        draw_text("Ton nom :", fontMenuChoice, (0,0,0), screen, 330,330)
+        draw_text("Entre 3 et 12 caractères | Entrez pour valider", fontMenuChoice, (255,255,255), screen, 420,590)
+        while b is False:
+            for event in pygame.event.get():
+
+                keys = pygame.key.get_pressed()
+                if event.type == pygame.KEYDOWN:
+                    key = pygame.key.name(event.key)
+                    print(key)
+                    if len(key) == 1:
+                        if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+                            string += key.upper()
+                        else:
+                            string += key
+                    elif key == "backspace":
+                        string = string[:len(string) - 1]
+                        print(string)
+                        screen.blit(box,(240,200))
+                        draw_text("Ton nom :", fontMenuChoice, (0,0,0), screen, 330,330)
+                        draw_text("Entre 3 et 12 caractères | Entrez pour valider", fontMenuChoice, (255,255,255), screen, 420,590)
+                    elif event.key == pygame.K_RETURN and len(string) > 3 and len(string) < 12:
+                        print(string)
+                        b= True
+                        a= False
+                        
+            
+                draw_text(string, fontMenu, (0,0,0), screen, 460,450)
+        
+        
+            pygame.display.update()
+            mainClock.tick(60)
+        pygame.display.update()
+        mainClock.tick(60)
+
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+def choix():
+    bgn = pygame.image.load('Design/Interface/BackVS.png')
+    screen.blit(bgn, (0, 0))
+    dresseur1 = pygame.image.load('Design/character/trainer1.png').convert_alpha()
+    dresseur1 = pygame.transform.scale(dresseur1, (700, 500))
+    dresseur2 = pygame.image.load('Design/character/trainer2.png').convert_alpha()
+    dresseur2 = pygame.transform.scale(dresseur2, (700, 500))
+    button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+    button1 = pygame.transform.scale(button1, (500, 300))
+    button2 = pygame.image.load('Design/interface/greenClick.png').convert_alpha()
+    button2 = pygame.transform.scale(button2, (500, 300))
+    a = True
+    screen.blit(dresseur1,(0,150))
+    screen.blit(dresseur2,(400,150))
+    b1 = screen.blit(button1,(190,610))
+    b2 = screen.blit(button2,(600,610))
+    draw_text("CAMPAGNARD", fontMenuChoice, (207,33,33), screen, 370,750)
+    draw_text("RACAILLE", fontMenuChoice, (66, 174, 70), screen, 800,750)
+    click = False
+    time.sleep(0.1)
+    while a:
+        mx, my = pygame.mouse.get_pos()
+        pygame.display.update()
+        mainClock.tick(60)
+        if b1.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('Red player')
+                return dresseur1
+        if b2.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('Green player')
+                return dresseur2
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+def choixP():
+    bgc = pygame.image.load('Design/Interface/choix.png')
+    screen.blit(bgc, (0, 0))
+    a = True
+    button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+    button1 = pygame.transform.scale(button1, (500, 300))
+    button2 = pygame.image.load('Design/interface/greenClick.png').convert_alpha()
+    button2 = pygame.transform.scale(button2, (500, 300))
+    button3 = pygame.image.load('Design/interface/blueClick.png').convert_alpha()
+    button3 = pygame.transform.scale(button3, (500, 300))
+    b1 = screen.blit(button1,(400,650))
+    b2 = screen.blit(button2,(800,650))
+    b3 = screen.blit(button3,(0,650))
+    init_IA("start")
+    image_update("start")
+    click = False
+    while a:
+
+        screen.blit(pokeChoice1,(50,220))
+        screen.blit(pokeChoice2,(450,220))
+        screen.blit(pokeChoice3,(850,220))
+
+        draw_text(IA.get_pokemon(1).get_name(), fontMenuChoice, (0,0,0), screen, 200,780)
+        draw_text(IA.get_pokemon(2).get_name(), fontMenuChoice, (0,0,0), screen, 600,780)
+        draw_text(IA.get_pokemon(3).get_name(), fontMenuChoice, (0,0,0), screen, 1000,780)
+
+        mx, my = pygame.mouse.get_pos()
+        pygame.display.update()
+        mainClock.tick(60)
+
+        if b1.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop2')
+                joueur.set_pokemon(1,IA.team[1])
+                waiting_menu()
+                
+        if b2.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop3')
+                joueur.set_pokemon(1,IA.team[2])
+                waiting_menu()
+                
+        if b3.collidepoint((mx,my)):
+            if click:
+                click = False
+                print('NomeKop1')
+                joueur.set_pokemon(1,IA.team[0])
+                waiting_menu()
+        
+        click = False
+                
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
 def draw_text(text,font,color,surface,x,y):
     """permet d'afficher un texte"""
     textobj = font.render(text, 1, color)
@@ -49,9 +301,8 @@ def main_menu():
         #bouton jouer
         if play.collidepoint((mx,my)):
             if click:
-                #intro toussatoussa
                 init_game()
-                waiting_menu()
+                start()
         options = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
         #bouton options
         if options.collidepoint((mx,my)):
@@ -120,7 +371,8 @@ def battle():
     running = True
     global IAlose
     IAlose = False
-    
+    joueur.set_currentPokemon(joueur.get_pokemon(1))
+    IA.set_currentPokemon(IA.get_pokemon(1))
     image_update("joueur")
     image_update("IA")
 
@@ -267,22 +519,22 @@ def teamMenu(condition): #en combat ou pause
         if returnButton.collidepoint((mx,my)):
             if click:
                 teamMenuRunning = False
-        if Poke1.collidepoint((mx,my)):
+        if Poke1.collidepoint((mx,my)) and joueur.team[0].get_name() != "None":
             if click:
                 select_pokemon(1,condition)
-        if Poke2.collidepoint((mx,my)):
+        if Poke2.collidepoint((mx,my)) and joueur.team[1].get_name() != "None":
             if click:
                 select_pokemon(2,condition)
-        if Poke3.collidepoint((mx,my)):
+        if Poke3.collidepoint((mx,my)) and joueur.team[2].get_name() != "None":
             if click:
                 select_pokemon(3,condition)
-        if Poke4.collidepoint((mx,my)):
+        if Poke4.collidepoint((mx,my)) and joueur.team[3].get_name() != "None":
             if click:
                 select_pokemon(4,condition)
-        if Poke5.collidepoint((mx,my)):
+        if Poke5.collidepoint((mx,my)) and joueur.team[4].get_name() != "None":
             if click:
                 select_pokemon(5,condition)
-        if Poke6.collidepoint((mx,my)):
+        if Poke6.collidepoint((mx,my)) and joueur.team[5].get_name() != "None":
             if click:
                 select_pokemon(6,condition)
         #affiche tous les boutons et le texte
@@ -329,7 +581,7 @@ def switchMenu():
         Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
         if Poke1.collidepoint((mx,my)):
             if click:
-                if joueur.team[0].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[0].get_name() == switchPokemon[0].get_name()) or joueur.team[0].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[0])
@@ -337,7 +589,7 @@ def switchMenu():
                     switchMenuRunning = False
         if Poke2.collidepoint((mx,my)):
             if click:
-                if joueur.team[1].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[1].get_name() == switchPokemon[0].get_name()) or joueur.team[1].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[1])
@@ -345,7 +597,7 @@ def switchMenu():
                     switchMenuRunning = False
         if Poke3.collidepoint((mx,my)):
             if click:
-                if joueur.team[2].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[2].get_name() == switchPokemon[0].get_name()) or joueur.team[2].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[2])
@@ -353,7 +605,7 @@ def switchMenu():
                     switchMenuRunning = False
         if Poke4.collidepoint((mx,my)):
             if click:
-                if joueur.team[3].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[3].get_name() == switchPokemon[0].get_name()) or joueur.team[3].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[3])
@@ -361,7 +613,7 @@ def switchMenu():
                     switchMenuRunning = False
         if Poke5.collidepoint((mx,my)):
             if click:
-                if joueur.team[4].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[4].get_name() == switchPokemon[0].get_name()) or joueur.team[4].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[4])
@@ -369,7 +621,7 @@ def switchMenu():
                     switchMenuRunning = False
         if Poke6.collidepoint((mx,my)):
             if click:
-                if joueur.team[5].get_name() == switchPokemon[0].get_name():
+                if (joueur.team[5].get_name() == switchPokemon[0].get_name()) or joueur.team[5].get_name() == "None":
                     switchMenuRunning = False
                 else:
                     joueur.set_pokemon(switchPokemon[1],joueur.team[5])
@@ -545,7 +797,6 @@ def waiting_menu():
                 joueur.update_team()
                 joueur.set_stage(joueur.get_stage()+1)
         equipe = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
-        #bouton options
         if equipe.collidepoint((mx,my)):
             if click:
                 #ouvre l'équipe du joueur
@@ -656,30 +907,19 @@ def init_game():
     global joueur
     global lose
     lose = False
-    inputPlayer, dresseur, Pokemon1 = start.start()
+    #Pokemon1 = Poke
     #inputPlayer = "joueur test"
     #Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
-    Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
+    Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
     #Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
     #Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
-    joueur = player.Player(inputPlayer,[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
+    joueur = player.Player("notDefined",[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
 def init_IA(typeIA): #IAtype wild / trainer / etc...
     global IA
     if typeIA == "start":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
-        """
-        if collidepoint box1:
-            joueur.set_pokemon(1,IA.team[0])
-            blabla du prof (tu as choisi joueur.team[0].get_name())
-        if collidepoint box2:
-            joueur.set_pokemon(2,IA.team[1])
-            blabla du prof (tu as choisi joueur.team[0].get_name())
-        if collidepoint box3:
-            joueur.set_pokemon(3,IA.team[2])
-            blabla du prof (tu as choisi joueur.team[0].get_name())
-        """
     elif typeIA == "wild":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649))],[])
     elif typeIA == "trainer":
@@ -698,6 +938,17 @@ def image_update(player):
         imageImport.importPokemonImage(IA.currentPokemon.get_name().lower(),player)
         currentPokemonIA=pygame.image.load("cache/IA/currentPokemon.png").convert_alpha()
         currentPokemonIA=pygame.transform.scale(currentPokemonIA, (360, 360))
+    elif player == "start":
+        imageImport.importPokemonImage(IA.team[0].get_name().lower(),player)
+        imageImport.importPokemonImage(IA.team[1].get_name().lower(),player)
+        imageImport.importPokemonImage(IA.team[2].get_name().lower(),player)
+        global pokeChoice1 , pokeChoice2, pokeChoice3
+        pokeChoice1 = pygame.image.load("cache/start/"+IA.team[0].get_name()+".png").convert_alpha()
+        pokeChoice2 = pygame.image.load("cache/start/"+IA.team[1].get_name()+".png").convert_alpha()
+        pokeChoice3 = pygame.image.load("cache/start/"+IA.team[2].get_name()+".png").convert_alpha()
+        pokeChoice1 = pygame.transform.scale(pokeChoice1, (360, 360))
+        pokeChoice2 = pygame.transform.scale(pokeChoice2, (360, 360))
+        pokeChoice3 = pygame.transform.scale(pokeChoice3, (360, 360))
 
 def display_pokemon_in_menu():
     xCoords = [125,525,925,125,525,925]
@@ -710,4 +961,4 @@ def display_pokemon_in_menu():
 
 
 
-#main_menu()
+main_menu()
