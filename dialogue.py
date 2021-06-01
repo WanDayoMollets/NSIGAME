@@ -3,6 +3,7 @@ import random
 import os
 import sys
 import time
+from menu import p
 
 
 from pygame.rect import Rect
@@ -35,7 +36,6 @@ def parlez(texte,x,y,color):
     b= True
     i=0
     while a:
-        mx, my = pygame.mouse.get_pos()
 
         if b:
             i+=1
@@ -56,7 +56,9 @@ def parlez(texte,x,y,color):
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-                        
+                if event.type == pygame.KEYDOWN:
+                    if (event.key == pygame.K_SPACE) and (p > 7):
+                        p = 50
         pygame.display.update()
         mainClock.tick(60)
 

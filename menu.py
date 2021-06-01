@@ -9,7 +9,6 @@ import pokemon
 import moves
 import CSV_import
 import imageImport
-from dialogue import *
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -54,6 +53,7 @@ def start():
         mainClock.tick(60)
 
 
+
 def prof():
     bgp = pygame.image.load('Design/Interface/profHouse.png')
     profIMG = pygame.image.load('Design/character/profchencrayon.png').convert_alpha()
@@ -62,6 +62,7 @@ def prof():
     box = pygame.transform.scale(box, (800, 500))
     skip = pygame.image.load('Design/Interface/Backreturn.png').convert_alpha()
     skip = pygame.transform.scale(skip, (80, 80))
+    global p
     p = 0
     lines = []
     with open('prof.txt') as f:
@@ -73,8 +74,6 @@ def prof():
         screen.blit(profIMG,(-200,00))
         screen.blit(box,(240,580))
         pygame.display.flip()
-        
-        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -107,6 +106,7 @@ def prof():
                                 screen.blit(profIMG,(-200,00))
                                 dresseurR = pygame.transform.flip(dresseur, True, False)
                                 screen.blit(dresseurR,(845,200))
+
                             if p ==6:
                                 global Poke
                                 choixP()
@@ -131,6 +131,45 @@ def prof():
 
         pygame.display.update()
         mainClock.tick(60)
+
+def parlez(texte,x,y,color):
+    if color == 0:
+        c = (255,255,255)
+    if color == 1:
+        c= (0,0,0)
+    a = True
+    b= True
+    i=0
+    while a:
+
+        if b:
+            i+=1
+            texteP(texte,i,x,y,c)
+            if i >= len(texte):    
+                b=False
+            time.sleep(0.03)
+        if not b:
+            if event.type == MOUSEBUTTONDOWN:
+                if click:
+                    a = False
+                    click = False
+            
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        click = True
+                if event.type == pygame.KEYDOWN:
+                    global p
+                    if (event.key == pygame.K_SPACE) and (p > 7):
+                        p = 50
+        pygame.display.update()
+        mainClock.tick(60)
+
+def texteP(texte,i,x,y,c):
+        draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
 
 def demande():
     string = ""
