@@ -670,6 +670,17 @@ def init_IA(typeIA): #IAtype wild / trainer / etc...
     global IA
     if typeIA == "start":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
+        """
+        if collidepoint box1:
+            joueur.set_pokemon(1,IA.team[0])
+            blabla du prof (tu as choisi joueur.team[0].get_name())
+        if collidepoint box2:
+            joueur.set_pokemon(2,IA.team[1])
+            blabla du prof (tu as choisi joueur.team[0].get_name())
+        if collidepoint box3:
+            joueur.set_pokemon(3,IA.team[2])
+            blabla du prof (tu as choisi joueur.team[0].get_name())
+        """
     elif typeIA == "wild":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649))],[])
     elif typeIA == "trainer":
