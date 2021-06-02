@@ -411,6 +411,7 @@ def battle():
         #bouton pour attaquer, ouvre le menu d'attaque
         if attackButton.collidepoint((mx,my)):
             if click:
+                click = False
                 attackMenu()
         if teamButton.collidepoint((mx,my)):
             if click:
