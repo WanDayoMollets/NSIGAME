@@ -763,7 +763,7 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
                     joueur.set_currentPokemon(joueur.get_pokemon(1))
                     select_pokemonRunning = False
                     
-                    
+        display_pokemon_in_menu()         
         
         click = False
 
