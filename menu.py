@@ -31,8 +31,9 @@ IAlose = False
 
 def start():
     bg = pygame.image.load('Design/Interface/BackGroundLogo.png')
-    while True:
-        
+    startBoucle = True
+    while startBoucle:
+
         pygame.display.flip()
         screen.blit(bg, (0, 0))
         draw_text("Press space to continue", fontMenuChoice, (80,150,200), screen, 540,630)
@@ -74,6 +75,9 @@ def prof():
         screen.blit(profIMG,(-200,00))
         screen.blit(box,(240,580))
         pygame.display.flip()
+
+        if lose == True:
+            break
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -445,30 +449,34 @@ def attackMenu():
         attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
         if attack1Button.collidepoint((mx,my)):
             if click:
-                tourJeu = threading.Thread(target = tour, args = (1,))
-                tourJeu.start()
-                block_user_control(tourJeu)
+                #tourJeu = threading.Thread(target = tour, args = (1,))
+                #tourJeu.start()
+                #block_user_control(tourJeu)
+                tour(1)
                 attackMenuRunning = False
         attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
         if attack2Button.collidepoint((mx,my)):
             if click:
-                tourJeu = threading.Thread(target = tour, args = (2,))
-                tourJeu.start()
-                block_user_control(tourJeu)
+                #tourJeu = threading.Thread(target = tour, args = (2,))
+                #tourJeu.start()
+                #block_user_control(tourJeu)
+                tour(2)
                 attackMenuRunning = False
         attack3Button = pygame.Rect(x*0.05,y*0.825,x*0.35,y*0.125)
         if attack3Button.collidepoint((mx,my)):
             if click:
-                tourJeu = threading.Thread(target = tour, args = (3,))
-                tourJeu.start()
-                block_user_control(tourJeu)
+                #tourJeu = threading.Thread(target = tour, args = (3,))
+                #tourJeu.start()
+                #block_user_control(tourJeu)
+                tour(3)
                 attackMenuRunning = False
         attack4Button = pygame.Rect(x*0.45,y*0.825,x*0.35,y*0.125)
         if attack4Button.collidepoint((mx,my)):
             if click:
-                tourJeu = threading.Thread(target = tour, args = (4,))
-                tourJeu.start()
-                block_user_control(tourJeu)
+                #tourJeu = threading.Thread(target = tour, args = (4,))
+                #tourJeu.start()
+                #block_user_control(tourJeu)
+                tour(4)
                 attackMenuRunning = False
         returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
         #retourne sur la fenetre de combat
@@ -518,15 +526,17 @@ def teamMenu(condition): #en combat ou pause
     teamMenuRunning = True
     menuBackground = pygame.image.load('Design/Interface/MenuBack.png')
     Button = pygame.image.load('Design/Interface/woodB.png')
+    returnButton = pygame.Rect(1140,850,x*0.064,y*0.08)
     while teamMenuRunning:
-        pygame.display.flip()
+        
         mx, my = pygame.mouse.get_pos()
         
         screen.blit(menuBackground,(32,590))
         
-        returnButton = pygame.Rect(1140,850,x*0.064,y*0.08)
-        pygame.draw.rect(screen, (183,160,75), returnButton)
-        draw_text("back", fontMenuChoice, (245,209,75), screen, 1160,880)
+        
+        if condition != "death":
+            pygame.draw.rect(screen, (183,160,75), returnButton)
+            draw_text("back", fontMenuChoice, (245,209,75), screen, 1160,880)
         Poke1 = screen.blit(Button,(x*0.05,y*0.65))
         Poke2 = screen.blit(Button,(x*0.33,y*0.65))
         Poke3 = screen.blit(Button,(x*0.61,y*0.65))
@@ -658,18 +668,21 @@ def selectPokemon_AfterDeath():
     """Menu de selection pokemon après une mort"""
     click = False
     deathMenuRunning = True
+    current_time = pygame.time.get_ticks()
+    delay = 5000 # 500ms = 0.5s
+    change_time = current_time + delay
+    show = True
+    menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+    
     while deathMenuRunning:
-        
-        mx, my = pygame.mouse.get_pos()
-
-        
-
         Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
         Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
         Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
         Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
         Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
         Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
+        mx, my = pygame.mouse.get_pos()
+        
         if Poke1.collidepoint((mx,my)):
             if click:
                 pass
@@ -688,14 +701,9 @@ def selectPokemon_AfterDeath():
         if Poke6.collidepoint((mx,my)):
             if click:
                 pass
+
         #affiche tous les boutons et le texte
-        
-        pygame.draw.rect(screen, (0,255,0), Poke1)
-        pygame.draw.rect(screen, (0,255,0), Poke2)
-        pygame.draw.rect(screen, (0,255,0), Poke3)
-        pygame.draw.rect(screen, (0,255,0), Poke4)
-        pygame.draw.rect(screen, (0,255,0), Poke5)
-        pygame.draw.rect(screen, (0,255,0), Poke6)
+
         
         draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
         display_pokemon_in_menu()
@@ -709,11 +717,35 @@ def selectPokemon_AfterDeath():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+        
+            # --- updates ---
 
-        #pygame.display.update()
+            current_time = pygame.time.get_ticks()
+
+            # is time to change ?
+            if current_time >= change_time:
+                # time of next change 
+                change_time = current_time + delay
+                show = not show
+
+            # --- draws ---
+
+            
+            pygame.draw.rect(screen, (255,255,255),menuBackground)
+
+            if show:
+                print("show")
+                pygame.draw.rect(screen, (0,255,0), Poke1)
+                pygame.draw.rect(screen, (0,255,0), Poke2)
+                pygame.draw.rect(screen, (0,255,0), Poke3)
+                pygame.draw.rect(screen, (0,255,0), Poke4)
+                pygame.draw.rect(screen, (0,255,0), Poke5)
+                pygame.draw.rect(screen, (0,255,0), Poke6)
+                draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
+                display_pokemon_in_menu()
+
+        pygame.display.update()
         mainClock.tick(60)
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
 
 def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mort (battle,pause)
     click = False
@@ -729,7 +761,7 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
         pygame.draw.rect(screen, (219,187,66), switch)
         equip = pygame.Rect(mxWhenClicked,myWhenClicked+50,75,50)
         pygame.draw.rect(screen, (245,209,75), equip)
-        if condition == "battle":
+        if condition == "battle" or condition == "death":
             draw_text("envoyer", fontMenuChoice, (0,0,0), screen, mxWhenClicked,myWhenClicked+10)
             draw_text("infos", fontMenuChoice, (0,0,0), screen, mxWhenClicked,myWhenClicked+60)
         elif condition == "pause":
@@ -745,9 +777,9 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
                 if condition == "battle" and joueur.get_currentPokemon().get_name() == joueur.team[pokemonNb-1].get_name():
                     print(f"{joueur.get_currentPokemon().get_name()} est déjà en combat")
                     select_pokemonRunning = False
-                elif condition == "battle" and joueur.team[pokemonNb-1].get_name() == "None":
+                elif (condition == "battle" or condition == "death") and joueur.team[pokemonNb-1].get_name() == "None":
                     print("Ceci n'est pas un pokémon")
-                elif condition == "battle":
+                elif condition == "battle" or condition == "death":
                     joueur.set_currentPokemon(joueur.team[pokemonNb-1])
                     image_update("joueur")
                     IA_tour = threading.Thread(target = tourIA(), args = ())
@@ -897,7 +929,7 @@ def check_death():
                     IA.set_currentPokemon(IA.get_pokemon(i+1))
             print(f"{IA.get_name()} envoie {IA.get_currentPokemon().get_name()}")
             image_update("IA")
-    if is_dead(joueur.get_currentPokemon()):
+    elif is_dead(joueur.get_currentPokemon()):
         print(f"{joueur.get_currentPokemon().get_name()} est mort")
         joueur.set_pokemon(joueur.get_currentPokemon_position()+1,notPokemon)
         if joueur.has_pokemon_remaining() == False:
@@ -906,7 +938,7 @@ def check_death():
             lose = True
         else:
             joueur.sort_team()
-            selectPokemon_AfterDeath()
+            teamMenu("death")
             image_update("joueur")
 
 def is_dead(pokemon):
