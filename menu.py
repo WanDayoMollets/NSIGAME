@@ -9,6 +9,7 @@ import pokemon
 import moves
 import CSV_import
 import imageImport
+import shutil
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -31,8 +32,7 @@ IAlose = False
 
 def start():
     bg = pygame.image.load('Design/Interface/BackGroundLogo.png')
-    startBoucle = True
-    while startBoucle:
+    while True:
 
         pygame.display.flip()
         screen.blit(bg, (0, 0))
@@ -664,89 +664,6 @@ def switchMenu():
         pygame.display.update()
         mainClock.tick(60)
 
-def selectPokemon_AfterDeath(): 
-    """Menu de selection pokemon après une mort"""
-    click = False
-    deathMenuRunning = True
-    current_time = pygame.time.get_ticks()
-    delay = 5000 # 500ms = 0.5s
-    change_time = current_time + delay
-    show = True
-    menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
-    
-    while deathMenuRunning:
-        Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
-        Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
-        Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
-        Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
-        Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
-        Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
-        mx, my = pygame.mouse.get_pos()
-        
-        if Poke1.collidepoint((mx,my)):
-            if click:
-                pass
-        if Poke2.collidepoint((mx,my)):
-            if click:
-                select_pokemon(2,"battle")
-        if Poke3.collidepoint((mx,my)):
-            if click:
-                pass
-        if Poke4.collidepoint((mx,my)):
-            if click:
-                pass
-        if Poke5.collidepoint((mx,my)):
-            if click:
-                pass
-        if Poke6.collidepoint((mx,my)):
-            if click:
-                pass
-
-        #affiche tous les boutons et le texte
-
-        
-        draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
-        display_pokemon_in_menu()
-
-        click = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-        
-            # --- updates ---
-
-            current_time = pygame.time.get_ticks()
-
-            # is time to change ?
-            if current_time >= change_time:
-                # time of next change 
-                change_time = current_time + delay
-                show = not show
-
-            # --- draws ---
-
-            
-            pygame.draw.rect(screen, (255,255,255),menuBackground)
-
-            if show:
-                print("show")
-                pygame.draw.rect(screen, (0,255,0), Poke1)
-                pygame.draw.rect(screen, (0,255,0), Poke2)
-                pygame.draw.rect(screen, (0,255,0), Poke3)
-                pygame.draw.rect(screen, (0,255,0), Poke4)
-                pygame.draw.rect(screen, (0,255,0), Poke5)
-                pygame.draw.rect(screen, (0,255,0), Poke6)
-                draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
-                display_pokemon_in_menu()
-
-        pygame.display.update()
-        mainClock.tick(60)
-
 def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mort (battle,pause)
     click = False
     select_pokemonRunning = True
@@ -811,6 +728,7 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
         mainClock.tick(60)
 
 def waiting_menu():
+    shutil.rmtree("cache/start")
     click = False
     gameRunning = True
     bgw = pygame.image.load('Design/Interface/gestionback.png')
@@ -984,6 +902,8 @@ def image_update(player):
         currentPokemonIA=pygame.image.load("cache/IA/currentPokemon.png").convert_alpha()
         currentPokemonIA=pygame.transform.scale(currentPokemonIA, (360, 360))
     elif player == "start":
+        if not os.path.exists("cache/start"):
+            os.makedirs("cache/start")
         imageImport.importPokemonImage(IA.team[0].get_name().lower(),player)
         imageImport.importPokemonImage(IA.team[1].get_name().lower(),player)
         imageImport.importPokemonImage(IA.team[2].get_name().lower(),player)
