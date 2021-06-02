@@ -381,6 +381,7 @@ def battle():
     running = True
     global IAlose
     IAlose = False
+    click = False
     joueur.set_currentPokemon(joueur.get_pokemon(1))
     IA.set_currentPokemon(IA.get_pokemon(1))
     image_update("joueur")
@@ -411,10 +412,10 @@ def battle():
                 teamMenu("battle")
         #affiche tous les boutons et le texte
         screen.blit(menuBackground,(32,590))
-        pygame.draw.rect(screen, (255,0,0), attackButton)
-        pygame.draw.rect(screen, (0,0,255), teamButton)
-        draw_text("Attaquer", fontMenuChoice, (0,0,0), screen, x*0.21,y*0.78)
-        draw_text("Pokemons", fontMenuChoice, (0,0,0), screen, x*0.62,y*0.75)
+        pygame.draw.rect(screen, (95,78,21), attackButton)
+        pygame.draw.rect(screen, (95,78,21), teamButton)
+        draw_text("Attaquer", fontMenuChoice, (164,141,60), screen, x*0.21,y*0.78)
+        draw_text("Pokemons", fontMenuChoice, (164,141,60), screen, x*0.62,y*0.75)
 
 
         for event in pygame.event.get():
