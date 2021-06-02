@@ -298,9 +298,9 @@ def choixP():
         screen.blit(pokeChoice2,(450,220))
         screen.blit(pokeChoice3,(850,220))
 
-        draw_text(IA.get_pokemon(1).get_name(), fontMenuChoice, (0,0,0), screen, 200,780)
-        draw_text(IA.get_pokemon(2).get_name(), fontMenuChoice, (0,0,0), screen, 600,780)
-        draw_text(IA.get_pokemon(3).get_name(), fontMenuChoice, (0,0,0), screen, 1000,780)
+        draw_text(IA.get_pokemon(1).get_name(), fontMenuChoice, (33,96,207), screen, 200,790)
+        draw_text(IA.get_pokemon(2).get_name(), fontMenuChoice, (207,33,33), screen, 600,790)
+        draw_text(IA.get_pokemon(3).get_name(), fontMenuChoice, (66,174,70), screen, 1000,790)
 
         mx, my = pygame.mouse.get_pos()
         pygame.display.update()
@@ -385,21 +385,21 @@ def battle():
     IA.set_currentPokemon(IA.get_pokemon(1))
     image_update("joueur")
     image_update("IA")
-
+    bgf = pygame.image.load('Design/Interface/fight.png')
+    menuBackground = pygame.image.load('Design/Interface/MenuBack.png')
     while running:
-        screen.fill((0,0,0))
+        screen.blit(bgf,(0,0))
 
 
         if lose == True or IAlose == True:
             running = False
-
-        screen.blit(currentPokemonJoueur,(0.1*x,0.25*y))
-        screen.blit(currentPokemonIA,(0.6*x,0.1*y))
+        
+        screen.blit(currentPokemonJoueur,(128,230))
+        screen.blit(currentPokemonIA,(770,-30))
         
 
         mx, my = pygame.mouse.get_pos()
 
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
         attackButton = pygame.Rect(x*0.1,y*0.7,x*0.3,y*0.2)
         teamButton = pygame.Rect(x*0.6,y*0.7,x*0.25,y*0.1)
         #bouton pour attaquer, ouvre le menu d'attaque
@@ -410,13 +410,12 @@ def battle():
             if click:
                 teamMenu("battle")
         #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
+        screen.blit(menuBackground,(32,590))
         pygame.draw.rect(screen, (255,0,0), attackButton)
         pygame.draw.rect(screen, (0,0,255), teamButton)
         draw_text("Attaquer", fontMenuChoice, (0,0,0), screen, x*0.21,y*0.78)
         draw_text("Pokemons", fontMenuChoice, (0,0,0), screen, x*0.62,y*0.75)
 
-        click = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -512,19 +511,23 @@ def teamMenu(condition): #en combat ou pause
     click = False
     global teamMenuRunning
     teamMenuRunning = True
+    menuBackground = pygame.image.load('Design/Interface/MenuBack.png')
+    Button = pygame.image.load('Design/Interface/woodB.png')
     while teamMenuRunning:
-
+        pygame.display.flip()
         mx, my = pygame.mouse.get_pos()
-
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
-
-        returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
-        Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
-        Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
-        Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
-        Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
-        Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
-        Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
+        
+        screen.blit(menuBackground,(32,590))
+        
+        returnButton = pygame.Rect(1140,850,x*0.064,y*0.08)
+        pygame.draw.rect(screen, (183,160,75), returnButton)
+        draw_text("back", fontMenuChoice, (245,209,75), screen, 1160,880)
+        Poke1 = screen.blit(Button,(x*0.05,y*0.65))
+        Poke2 = screen.blit(Button,(x*0.33,y*0.65))
+        Poke3 = screen.blit(Button,(x*0.61,y*0.65))
+        Poke4 = screen.blit(Button,(x*0.05,y*0.85))
+        Poke5 = screen.blit(Button,(x*0.33,y*0.85))
+        Poke6 = screen.blit(Button,(x*0.61,y*0.85))
         #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
             if click:
@@ -547,16 +550,7 @@ def teamMenu(condition): #en combat ou pause
         if Poke6.collidepoint((mx,my)) and joueur.team[5].get_name() != "None":
             if click:
                 select_pokemon(6,condition)
-        #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
-        pygame.draw.rect(screen, (255,0,0), returnButton)
-        pygame.draw.rect(screen, (0,255,0), Poke1)
-        pygame.draw.rect(screen, (0,255,0), Poke2)
-        pygame.draw.rect(screen, (0,255,0), Poke3)
-        pygame.draw.rect(screen, (0,255,0), Poke4)
-        pygame.draw.rect(screen, (0,255,0), Poke5)
-        pygame.draw.rect(screen, (0,255,0), Poke6)
-        draw_text("back", fontMenuChoice, (0,0,0), screen, x*0.92,y*0.91)
+        
         display_pokemon_in_menu()
 
         click = False
@@ -577,18 +571,19 @@ def switchMenu():
     click = False
     global teamMenuRunning
     switchMenuRunning = True
+    Button = pygame.image.load('Design/Interface/woodB.png')
+    menuBackground = pygame.image.load('Design/Interface/MenuBack.png')
     while switchMenuRunning:
 
         mx, my = pygame.mouse.get_pos()
+        screen.blit(menuBackground,(32,590))
 
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
-
-        Poke1 = pygame.Rect(x*0.05,y*0.65,x*0.25,y*0.1)
-        Poke2 = pygame.Rect(x*0.33,y*0.65,x*0.25,y*0.1)
-        Poke3 = pygame.Rect(x*0.61,y*0.65,x*0.25,y*0.1)
-        Poke4 = pygame.Rect(x*0.05,y*0.85,x*0.25,y*0.1)
-        Poke5 = pygame.Rect(x*0.33,y*0.85,x*0.25,y*0.1)
-        Poke6 = pygame.Rect(x*0.61,y*0.85,x*0.25,y*0.1)
+        Poke1 = screen.blit(Button,(x*0.05,y*0.65))
+        Poke2 = screen.blit(Button,(x*0.33,y*0.65))
+        Poke3 = screen.blit(Button,(x*0.61,y*0.65))
+        Poke4 = screen.blit(Button,(x*0.05,y*0.85))
+        Poke5 = screen.blit(Button,(x*0.33,y*0.85))
+        Poke6 = screen.blit(Button,(x*0.61,y*0.85))
         if Poke1.collidepoint((mx,my)):
             if click:
                 if (joueur.team[0].get_name() == switchPokemon[0].get_name()) or joueur.team[0].get_name() == "None":
@@ -638,14 +633,7 @@ def switchMenu():
                     joueur.set_pokemon(6,switchPokemon[0])
                     switchMenuRunning = False
         #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
-        pygame.draw.rect(screen, (0,255,0), Poke1)
-        pygame.draw.rect(screen, (0,255,0), Poke2)
-        pygame.draw.rect(screen, (0,255,0), Poke3)
-        pygame.draw.rect(screen, (0,255,0), Poke4)
-        pygame.draw.rect(screen, (0,255,0), Poke5)
-        pygame.draw.rect(screen, (0,255,0), Poke6)
-        draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (0,0,0), screen, 50,600)
+        draw_text("Choisissez un pokemon à échanger", fontMenuChoice, (221,190,76), screen, 50,600)
         display_pokemon_in_menu()
 
         click = False
@@ -733,9 +721,9 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
         options = pygame.Rect(mxWhenClicked,myWhenClicked,75,100)
         pygame.draw.rect(screen, (0,255,255), options)
         switch = pygame.Rect(mxWhenClicked,myWhenClicked,75,50)
-        pygame.draw.rect(screen, (255,0,255), switch)
+        pygame.draw.rect(screen, (219,187,66), switch)
         equip = pygame.Rect(mxWhenClicked,myWhenClicked+50,75,50)
-        pygame.draw.rect(screen, (255,255,0), equip)
+        pygame.draw.rect(screen, (245,209,75), equip)
         if condition == "battle":
             draw_text("envoyer", fontMenuChoice, (0,0,0), screen, mxWhenClicked,myWhenClicked+10)
             draw_text("infos", fontMenuChoice, (0,0,0), screen, mxWhenClicked,myWhenClicked+60)
@@ -788,19 +776,26 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
 def waiting_menu():
     click = False
     gameRunning = True
+    bgw = pygame.image.load('Design/Interface/gestionback.png')
+    Sign1 = pygame.image.load('Design/Interface/continuer.png').convert_alpha()
+    Sign2 = pygame.image.load('Design/Interface/equipe.png').convert_alpha()
+    
     """Menu d'attente -> organiser son équipe"""
     while gameRunning:
-        screen.fill((0,0,0))
+        pygame.display.flip()
+        screen.blit(bgw,(0,0))
+        s1 = screen.blit(Sign1,(700,330))
+        s2 = screen.blit(Sign2,(130,280))
         if lose == True:
             gameRunning = False
-        draw_text(f"Preparez votre equipe!", fontMenu, (255,255,255), screen, x*0.345,y*0.2)
-        draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (255,255,255), screen, x*0.345,y*0.3)
+        
+        draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (229,192,57), screen, 450,500)
 
         mx, my = pygame.mouse.get_pos()
 
-        next = pygame.Rect(x*0.2,y*0.5,x*0.2,y*0.125)
         #bouton next
-        if next.collidepoint((mx,my)):
+        
+        if s1.collidepoint((mx,my)):
             if click:
                 #prochain combat
                 joueur.save_team()
@@ -810,24 +805,23 @@ def waiting_menu():
                 joueur.reset_team()
                 joueur.update_team()
                 joueur.set_stage(joueur.get_stage()+1)
-        equipe = pygame.Rect(x*0.6,y*0.5,x*0.2,y*0.125)
-        if equipe.collidepoint((mx,my)):
+        
+        if s2.collidepoint((mx,my)):
             if click:
                 #ouvre l'équipe du joueur
                 teamMenu("pause")
+
+        
         leave = pygame.Rect(x*0.87,y*0.89,x*0.125,y*0.1)
         #bouton quitter
+        
         if leave.collidepoint((mx,my)):
             if click:
                 pygame.quit()
                 sys.exit()
         #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,0,0), next)
-        pygame.draw.rect(screen, (255,0,0), equipe)
-        pygame.draw.rect(screen, (255,0,0), leave)
-        draw_text("Combat suivant", fontMenuChoice, (0,0,0), screen, x*0.27,y*0.55)
-        draw_text("Equipe", fontMenuChoice, (0,0,0), screen, x*0.66,y*0.55)
-        draw_text("Quitter", fontMenuChoice, (0,0,0), screen, x*0.9,y*0.925)
+        pygame.draw.rect(screen, (96,191,40), leave)
+        draw_text("Quitter", fontMenuChoice, (133,222,81), screen, x*0.9,y*0.925)
 
         click = False
 
@@ -970,9 +964,6 @@ def display_pokemon_in_menu():
     for i in range(len(joueur.team)):
         if joueur.team[i].get_name() != "None":
             draw_text(f"{joueur.team[i].get_name()}", fontMenuChoice, (0,0,0), screen, xCoords[i],yCoords[i])
-
-
-
 
 
 start()
