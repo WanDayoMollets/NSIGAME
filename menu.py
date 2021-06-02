@@ -386,37 +386,39 @@ def battle():
     IA.set_currentPokemon(IA.get_pokemon(1))
     image_update("joueur")
     image_update("IA")
+    button1 = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+    button1 = pygame.transform.scale(button1, (700, 500))
+    button2 = pygame.image.load('Design/interface/blueClick.png').convert_alpha()
+    button2 = pygame.transform.scale(button2, (500, 300))
     bgf = pygame.image.load('Design/Interface/fight.png')
-    menuBackground = pygame.image.load('Design/Interface/MenuBack.png')
+    menuBackground = pygame.image.load('Design/Interface/acier.png')
     while running:
         screen.blit(bgf,(0,0))
-
 
         if lose == True or IAlose == True:
             running = False
         
         screen.blit(currentPokemonJoueur,(128,230))
         screen.blit(currentPokemonIA,(770,-30))
+        b1 = screen.blit(button1,(20,525))
+        b2 = screen.blit(button2,(700,550))
         
 
         mx, my = pygame.mouse.get_pos()
-
-        attackButton = pygame.Rect(x*0.1,y*0.7,x*0.3,y*0.2)
-        teamButton = pygame.Rect(x*0.6,y*0.7,x*0.25,y*0.1)
+        screen.blit(menuBackground,(32,590))
+        attackButton = screen.blit(button1,(20,525))
+        teamButton = screen.blit(button2,(700,550))
         #bouton pour attaquer, ouvre le menu d'attaque
         if attackButton.collidepoint((mx,my)):
             if click:
                 attackMenu()
         if teamButton.collidepoint((mx,my)):
             if click:
+                click =False
                 teamMenu("battle")
         #affiche tous les boutons et le texte
-        screen.blit(menuBackground,(32,590))
-        pygame.draw.rect(screen, (95,78,21), attackButton)
-        pygame.draw.rect(screen, (95,78,21), teamButton)
-        draw_text("Attaquer", fontMenuChoice, (164,141,60), screen, x*0.21,y*0.78)
-        draw_text("Pokemons", fontMenuChoice, (164,141,60), screen, x*0.62,y*0.75)
-
+        draw_text("Attaquer", fontMenu, (207,33,33), screen, 210,730)
+        draw_text("NoméKops", fontMenuChoice, (33,96,207), screen, 900,690)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -441,7 +443,7 @@ def attackMenu():
 
         attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
         if attack1Button.collidepoint((mx,my)):
-            if click: 
+            if click:
                 tourJeu = threading.Thread(target = tour, args = (1,))
                 tourJeu.start()
                 block_user_control(tourJeu)
@@ -471,6 +473,7 @@ def attackMenu():
         #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
             if click:
+                click = False
                 attackMenuRunning = False
         #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (255,255,255),menuBackground)
@@ -791,7 +794,7 @@ def waiting_menu():
             gameRunning = False
         
         draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (229,192,57), screen, 450,500)
-
+        draw_text("Clique sur les panneaux", fontMenuChoice, (229,192,57), screen, 500,930)
         mx, my = pygame.mouse.get_pos()
 
         #bouton next
