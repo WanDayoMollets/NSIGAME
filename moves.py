@@ -1,6 +1,7 @@
 class Move:
 
     def __init__(self,id_move : int,name : str,type_move : str,category : str,power : int,accuracy : int,pp : int):
+        """creer une attaque avec son  id, nom, type de l'attaque, sa categorie, sa puissance, sa precision et ses pp"""
         self.id_move = id_move
         self.name = name
         self.type_move = type_move
