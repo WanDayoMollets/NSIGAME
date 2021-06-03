@@ -31,6 +31,7 @@ lose = False
 IAlose = False 
 
 def start():
+    """Affiche l'écran de démarrage"""
     bg = pygame.image.load('Design/Interface/BackGroundLogo.png')
     while True:
 
@@ -56,6 +57,7 @@ def start():
 
 
 def prof():
+    """Lance le dialogue avec le prof"""
     bgp = pygame.image.load('Design/Interface/profHouse.png')
     profIMG = pygame.image.load('Design/character/profchencrayon.png').convert_alpha()
     profIMG = pygame.transform.scale(profIMG, (700, 500))
@@ -137,6 +139,7 @@ def prof():
         mainClock.tick(60)
 
 def parlez(texte,x,y,color):
+    """Permet de faire defiler le texte"""
     if color == 0:
         c = (255,255,255)
     if color == 1:
@@ -173,9 +176,11 @@ def parlez(texte,x,y,color):
         mainClock.tick(60)
 
 def texteP(texte,i,x,y,c):
-        draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
+    """Permet d'écrire une phrase du texte, sans le retour à la ligne"""
+    draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
 
 def demande():
+    """Lance une interface qui demande le nom du Joueur"""
     string = ""
     bgn = pygame.image.load('Design/Interface/Backname.png')
     screen.blit(bgn, (0, 0))
@@ -238,6 +243,7 @@ def demande():
                 pygame.quit()
                 sys.exit()
 def choix():
+    """Lance une interface qui demandera au joueur de faire un choix entre deux personnages"""
     bgn = pygame.image.load('Design/Interface/BackVS.png')
     screen.blit(bgn, (0, 0))
     dresseur1 = pygame.image.load('Design/character/trainer1.png').convert_alpha()
@@ -281,6 +287,7 @@ def choix():
                     click = True
 
 def choixP():
+    """Lance une interface qui demande au joueur de choisir un Nomekop parmis 3 autres"""
     bgc = pygame.image.load('Design/Interface/choix.png')
     screen.blit(bgc, (0, 0))
     a = True
@@ -342,6 +349,7 @@ def choixP():
                     click = True
 
 def draw_text(text,font,color,surface,x,y):
+    """Ecrit du texte sur l'écran"""
     """permet d'afficher un texte"""
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
@@ -396,6 +404,8 @@ def battle():
     button2 = pygame.transform.scale(button2, (500, 300))
     bgf = pygame.image.load('Design/Interface/fight.png')
     menuBackground = pygame.image.load('Design/Interface/acier.png')
+    HP = pygame.image.load('Design/interface/HP.png').convert_alpha()
+    HP = pygame.transform.scale(HP, (400, 200))
     while running:
         screen.blit(bgf,(0,0))
 
@@ -406,7 +416,8 @@ def battle():
         screen.blit(currentPokemonIA,(770,-30))
         b1 = screen.blit(button1,(20,525))
         b2 = screen.blit(button2,(700,550))
-        
+        hp = screen.blit(HP,(820,450))
+        hp2 = screen.blit(HP,(820,-60))
 
         mx, my = pygame.mouse.get_pos()
         screen.blit(menuBackground,(32,590))
@@ -424,6 +435,14 @@ def battle():
         #affiche tous les boutons et le texte
         draw_text("Attaquer", fontMenu, (207,33,33), screen, 210,730)
         draw_text("NoméKops", fontMenuChoice, (33,96,207), screen, 900,690)
+        draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
+        draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
+        draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
+
+        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
+        draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
+        draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -440,38 +459,47 @@ def attackMenu():
     """Menu d'attaque, affiche les 4 attaques dispo"""
     click = False
     attackMenuRunning = True
+    menuBackground = pygame.image.load('Design/Interface/acier.png')
+    screen.blit(menuBackground,(32,590))
+
     while attackMenuRunning:
 
         mx, my = pygame.mouse.get_pos()
+        button = pygame.image.load('Design/interface/redClick.png').convert_alpha()
+        button = pygame.transform.scale(button, (500, 270))
+        
 
-        menuBackground = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
+        attackb1 = screen.blit(button,(30,550))
+        attackb2 = screen.blit(button,(600,550))
+        attackb3 = screen.blit(button,(30,710))
+        attackb4 = screen.blit(button,(600,710))
 
-        attack1Button = pygame.Rect(x*0.05,y*0.625,x*0.35,y*0.125)
-        if attack1Button.collidepoint((mx,my)):
+
+        if attackb1.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (1,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
                 tour(1)
                 attackMenuRunning = False
-        attack2Button = pygame.Rect(x*0.45,y*0.625,x*0.35,y*0.125)
-        if attack2Button.collidepoint((mx,my)):
+    
+        if attackb2.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (2,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
                 tour(2)
                 attackMenuRunning = False
-        attack3Button = pygame.Rect(x*0.05,y*0.825,x*0.35,y*0.125)
-        if attack3Button.collidepoint((mx,my)):
+        
+        if attackb3.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (3,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
                 tour(3)
                 attackMenuRunning = False
-        attack4Button = pygame.Rect(x*0.45,y*0.825,x*0.35,y*0.125)
-        if attack4Button.collidepoint((mx,my)):
+        
+        if attackb4.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (4,))
                 #tourJeu.start()
@@ -485,17 +513,17 @@ def attackMenu():
                 click = False
                 attackMenuRunning = False
         #affiche tous les boutons et le texte
-        pygame.draw.rect(screen, (255,255,255),menuBackground)
-        pygame.draw.rect(screen, (255,0,0),attack1Button)
-        pygame.draw.rect(screen, (255,0,0),attack2Button)
-        pygame.draw.rect(screen, (255,0,0),attack3Button)
-        pygame.draw.rect(screen, (255,0,0),attack4Button)
+        
         pygame.draw.rect(screen, (255,0,0), returnButton)
         draw_text("back", fontMenuChoice, (0,0,0), screen, x*0.92,y*0.91)
-        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(1)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.65)
-        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(2)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.65)
-        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(3)}", fontMenuChoice, (0,0,0), screen, x*0.15,y*0.9)
-        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(4)}", fontMenuChoice, (0,0,0), screen, x*0.5,y*0.9)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(1)}", fontMenuChoice, (207,33,33), screen,210,670)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(1)} | {joueur.get_currentPokemon().get_pokemon_move_power(1)}", fontMenuChoice, (207,33,33), screen,220,700)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(2)}", fontMenuChoice, (207,33,33), screen, 780,670)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(2)} | {joueur.get_currentPokemon().get_pokemon_move_power(2)}", fontMenuChoice, (207,33,33), screen,790,700)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(3)}", fontMenuChoice, (207,33,33), screen, 210,840)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(3)} | {joueur.get_currentPokemon().get_pokemon_move_power(3)}", fontMenuChoice, (207,33,33), screen,220,870)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(4)}", fontMenuChoice, (207,33,33), screen, 780,840)
+        draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(4)} | {joueur.get_currentPokemon().get_pokemon_move_power(4)}", fontMenuChoice, (207,33,33), screen,790,870)
 
         click = False
 
@@ -664,7 +692,8 @@ def switchMenu():
         pygame.display.update()
         mainClock.tick(60)
 
-def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mort (battle,pause)
+def select_pokemon(pokemonNb,condition):
+    """Fenetre pour changer de place de Nomekop dans l'équipe""" #condition : en combat ou après une mort (battle,pause)
     click = False
     select_pokemonRunning = True
     mxWhenClicked,myWhenClicked = pygame.mouse.get_pos()
@@ -728,6 +757,7 @@ def select_pokemon(pokemonNb,condition): #condition : en combat ou après une mo
         mainClock.tick(60)
 
 def waiting_menu():
+    """Interface qui permet au joueur de réorganiser son équipe, de continuer la partie, ou de la quitter"""
     shutil.rmtree("cache/start")
     click = False
     gameRunning = True
@@ -792,6 +822,7 @@ def waiting_menu():
         mainClock.tick(60)
 
 def block_user_control(wait):
+    """Bloque les commandes du joueur pendant le tour de l'adversaire"""
     blockedCommand=True
     while blockedCommand:
         blockMenu = pygame.Rect(x*0.025,y*0.6,x*0.95,y*0.375)
@@ -806,14 +837,17 @@ def block_user_control(wait):
         mainClock.tick(60)
 
 def tourIA():
+    """IA lance une attaque sur le joueur"""
     attaque = random.randint(0,3)
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
     time.sleep(0.5)
 
 def tourJoueur(numAttaque):
+    """Le joueur lance une attaque sur l'adversaire (IA)"""
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
 
 def tour(numAttaqueJoueur):
+    """Regarde la vie des deux adversaire et en informe le joueur"""
     print(f"Vie du pokemon joueur : {joueur.get_currentPokemon().get_hp()}")
     print(f"Vie du pokemon IA : {IA.get_currentPokemon().get_hp()}")
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
@@ -832,6 +866,7 @@ def tour(numAttaqueJoueur):
         check_death()
 
 def check_death():
+    """Regarde s'il reste des Nomekop en vie dans l'équipe"""
     if is_dead(IA.get_currentPokemon()):
         print(f"{IA.get_currentPokemon().get_name()} de {IA.get_name()} est mort")
         IA.set_pokemon(IA.get_currentPokemon_position()+1,notPokemon)
@@ -860,6 +895,7 @@ def check_death():
             image_update("joueur")
 
 def is_dead(pokemon):
+    """Regarde si un NomeKop est mort"""
     if pokemon.get_hp() <= 0:
         return True
     return False
@@ -868,6 +904,7 @@ def is_dead(pokemon):
 notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,0,False,[])
 
 def init_game():
+    """Initialise les équipes des deux cotés"""
     global joueur
     global lose
     lose = False
@@ -881,6 +918,7 @@ def init_game():
     joueur.update_team()
 
 def init_IA(typeIA): #IAtype wild / trainer / etc...
+    """Defini le type d'IA"""
     global IA
     if typeIA == "start":
         IA = player.Player("IA",[CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649)),CSV_import.PokeCSV(random.randint(1,649))],[])
@@ -891,6 +929,7 @@ def init_IA(typeIA): #IAtype wild / trainer / etc...
     IA.update_team()
 
 def image_update(player):
+    """Permet d'associer le Nomekop avec son image"""
     global currentPokemonJoueur
     global currentPokemonIA
     if player == "joueur":
@@ -916,6 +955,7 @@ def image_update(player):
         pokeChoice3 = pygame.transform.scale(pokeChoice3, (360, 360))
 
 def display_pokemon_in_menu():
+    """Affiche le nom du Nomekop"""
     xCoords = [125,525,925,125,525,925]
     yCoords = [650,650,650,850,850,850]
     for i in range(len(joueur.team)):

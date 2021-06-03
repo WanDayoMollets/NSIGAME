@@ -51,7 +51,14 @@ class Pokemon:
     def get_pokemon_move(self,moveNb):
         """recupere 1 des 4 moves du pokemon"""
         return self.moveSet[moveNb-1].name
-
+    def get_pokemon_move_category(self,moveNb):
+        """Donne la catégorie d'1 des 4 moves du pokemon"""
+        return self.moveSet[moveNb-1].category
+    
+    def get_pokemon_move_power(self,moveNb):
+        """Donne la catégorie d'1 des 4 moves du pokemon"""
+        return self.moveSet[moveNb-1].power
+    
     def get_pokemon_id(self):
         return self.pokemon_id
 
@@ -271,10 +278,12 @@ class Pokemon:
         self.update_speed()
 
     def level_up(self,level):
+        """Ajoute des niveaux à un Nomekop"""
         self.set_level(level)
         self.update_stats()
     
     def save_stats(self):
+        """Enregistre les stats du Nomekop"""
         self.set_saved_hp(self.get_hp())
         self.set_saved_attack(self.get_attack())
         self.set_saved_defense(self.get_defense())
@@ -283,6 +292,7 @@ class Pokemon:
         self.set_saved_speed(self.get_speed())
     
     def reset_stats(self):
+        """Remet les stats enregistrer d'un Nomekop"""
         self.set_hp(self.get_saved_hp())
         self.set_attack(self.get_saved_attack())
         self.set_defense(self.get_saved_defense())
@@ -291,13 +301,14 @@ class Pokemon:
         self.set_speed(self.get_saved_speed())
     
     def damage(self, damage):
+        """Enleve de la vie en fonction des damages reçus"""
         self.hp -= damage
 
     def attack_target(self, target, move):
+        """Attaque une cible, et lui fait des dégats ou statut"""
         global attackType
         global defenseType
         print(f"{self.get_name()} utilise {move.name}")
-        #ajouter condition en fonction du type pour les faiblesses
         if move.accuracy == 100 or random.randint(0,99) < move.accuracy:
             if move.category == "Physical":
                 attackType = self.attack
