@@ -401,6 +401,7 @@ def battle():
     global IAlose
     IAlose = False
     click = False
+    dcc = ""
     joueur.set_currentPokemon(joueur.get_pokemon(1))
     IA.set_currentPokemon(IA.get_pokemon(1))
     image_update("joueur")
@@ -425,7 +426,7 @@ def battle():
         b2 = screen.blit(button2,(700,550))
         hp = screen.blit(HP,(820,450))
         hp2 = screen.blit(HP,(820,-60))
-
+        
         mx, my = pygame.mouse.get_pos()
         screen.blit(menuBackground,(32,590))
         attackButton = screen.blit(button1,(20,525))
@@ -434,7 +435,7 @@ def battle():
         if attackButton.collidepoint((mx,my)):
             if click:
                 click = False
-                attackMenu()
+                dcc = attackMenu()
         if teamButton.collidepoint((mx,my)):
             if click:
                 click =False
@@ -450,7 +451,8 @@ def battle():
         draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
         draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
 
-
+        draw_text(dcc, fontMenuChoice, (66,174,70), screen,800,850)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -487,32 +489,33 @@ def attackMenu():
                 #tourJeu = threading.Thread(target = tour, args = (1,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
-                tour(1)
+                dcc = tour(1)
                 attackMenuRunning = False
-    
+                return dcc
         if attackb2.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (2,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
-                tour(2)
+                dcc = tour(2)
                 attackMenuRunning = False
-        
+                return dcc
         if attackb3.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (3,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
-                tour(3)
+                dcc = tour(3)
                 attackMenuRunning = False
-        
+                return dcc
         if attackb4.collidepoint((mx,my)):
             if click:
                 #tourJeu = threading.Thread(target = tour, args = (4,))
                 #tourJeu.start()
                 #block_user_control(tourJeu)
-                tour(4)
+                dcc = tour(4)
                 attackMenuRunning = False
+                return dcc
         returnButton = pygame.Rect(x*0.91,y*0.8745,x*0.064,y*0.1)
         #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
@@ -867,13 +870,17 @@ def tourIA():
     attaque = random.randint(0,3)
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
     print(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}")
-    draw_text(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}", fontMenuChoice, (66,174,174), screen, x*0.9,y*0.925)
+    dcc = f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}"
     time.sleep(0.5)
+    return dcc
 
 def tourJoueur(numAttaque):
     """Le joueur lance une attaque sur l'adversaire (IA)"""
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
     print(f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].name}")
+    dcc = f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].name}"
+    return dcc
+
 def tour(numAttaqueJoueur):
     """Regarde la vie des deux adversaire"""
 
@@ -882,15 +889,17 @@ def tour(numAttaqueJoueur):
         if is_dead(IA.get_currentPokemon()):
             check_death()
             return
-        tourIA()
-        check_death()     
+        dcc = tourIA()
+        check_death()
+        return dcc
     else:
-        tourIA()
+        dcc = tourIA()
         if is_dead(joueur.get_currentPokemon()):
             check_death()
             return
         tourJoueur(numAttaqueJoueur)
         check_death()
+        return dcc
 
 def check_death():
     """Regarde s'il reste des Nomekop en vie dans l'équipe"""
