@@ -8,6 +8,7 @@ notPokemon = pokemon.Pokemon(0,"None","","",0,0,0,0,0,0,0,False,[])
 class Player:
 
     def __init__(self,playerName : str,team : list,bag : list,stage=1):
+        """Creer un joueur avec un nom, une equipe, un sac et le stage dans lequel il est"""
         self.playerName = playerName
         self.team = team 
         self.bag = bag #[[nbObjet,objet]]
@@ -39,6 +40,7 @@ class Player:
         self.currentPokemon = pokemon
     
     def has_pokemon_remaining(self):
+        """renvoie True s'il reste des pokemons, False si plus de pokemons dans la team"""
         pokemonInTeam = 0
         for pokemon in self.team:
             if pokemon.get_name() != "None":
@@ -48,11 +50,13 @@ class Player:
         return True
     
     def get_currentPokemon_position(self):
+        """Renvoie la position du pokemon dans la team"""
         for i in range(len(self.team)):
             if self.team[i].get_name() == self.currentPokemon.get_name():
                 return i
     
     def update_team(self):
+        """Update les stats des pokemons de la team"""
         for i in range(len(self.team)):
             if self.team[i].get_name() != "None":
                 self.team[i].update_stats()
@@ -60,14 +64,17 @@ class Player:
     #save les stats du pokemon
 
     def save_team(self):
+        """sauvegarde la team"""
         for i in range(len(self.team)):
             self.team[i].save_stats()
     
     def reset_team(self):
+        """reset la team à partir d'une sauvegarde"""
         for i in range(len(self.team)):
             self.team[i].reset_stats()
 
     def sort_team(self):
+        """Permet de trier la team du joueur s'il manque des pokemons"""
         for i in range(len(self.team)-1):
             if self.team[i].get_name() == "None":
                 self.team[i] = self.team[i+1]
