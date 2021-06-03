@@ -514,8 +514,8 @@ def attackMenu():
                 attackMenuRunning = False
         #affiche tous les boutons et le texte
         
-        pygame.draw.rect(screen, (255,0,0), returnButton)
-        draw_text("back", fontMenuChoice, (0,0,0), screen, x*0.92,y*0.91)
+        pygame.draw.rect(screen, (249, 82, 82), returnButton)
+        draw_text("back", fontMenuChoice, (207,33,33), screen, x*0.92,y*0.91)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(1)}", fontMenuChoice, (207,33,33), screen,210,670)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(1)} | {joueur.get_currentPokemon().get_pokemon_move_power(1)}", fontMenuChoice, (207,33,33), screen,220,700)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(2)}", fontMenuChoice, (207,33,33), screen, 780,670)
@@ -524,6 +524,14 @@ def attackMenu():
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(3)} | {joueur.get_currentPokemon().get_pokemon_move_power(3)}", fontMenuChoice, (207,33,33), screen,220,870)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(4)}", fontMenuChoice, (207,33,33), screen, 780,840)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(4)} | {joueur.get_currentPokemon().get_pokemon_move_power(4)}", fontMenuChoice, (207,33,33), screen,790,870)
+
+        draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
+        draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
+        draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
+
+        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
+        draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
+        draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
 
         click = False
 
@@ -593,8 +601,15 @@ def teamMenu(condition): #en combat ou pause
         if Poke6.collidepoint((mx,my)) and joueur.team[5].get_name() != "None":
             if click:
                 select_pokemon(6,condition)
-        
         display_pokemon_in_menu()
+        if condition == "battle":
+            draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
+            draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
+            draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
+
+            draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
+            draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
+            draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
 
         click = False
 
