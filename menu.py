@@ -605,6 +605,9 @@ def teamMenu(condition): #en combat ou pause
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    teamMenuRunning = False
 
         pygame.display.update()
         mainClock.tick(60)
