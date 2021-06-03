@@ -5,6 +5,7 @@ import moves
 class Pokemon:
 
     def __init__(self,pokemon_id : int,name : str,type1 : str,type2 : str,Base_hp : int,Base_attack : int,Base_defense : int,Base_sp_attack : int,Base_sp_defense : int,Base_speed : int, generation : int,legendary : bool,moveset : list):
+        """creer un pokemon avec son id, son som, son type 1, son type 2, ses stats de base, sa generation, si legendaire ou non et ses attaques"""
         self.pokemon_id = pokemon_id
         self.name = name
         self.type1 = type1
@@ -44,7 +45,9 @@ class Pokemon:
         self.moveSet = moveset
         self.generation = generation
         
-        
+    def get_generation(self):
+        return self.generation
+       
     def get_pokemon_move(self,moveNb):
         """recupere 1 des 4 moves du pokemon"""
         return self.moveSet[moveNb-1].name
