@@ -308,7 +308,6 @@ class Pokemon:
         """Attaque une cible, et lui fait des dégats ou statut"""
         global attackType
         global defenseType
-        print(f"{self.get_name()} utilise {move.name}")
         if move.accuracy == 100 or random.randint(0,99) < move.accuracy:
             if move.category == "Physical":
                 attackType = self.attack

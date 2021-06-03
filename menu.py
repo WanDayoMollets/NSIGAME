@@ -116,6 +116,10 @@ def prof():
                                 dresseurR = pygame.transform.flip(dresseur, True, False)
                                 screen.blit(dresseurR,(845,200))
 
+                            if p == 5:
+                                draw_text("Cliquez une fois", fontMenuChoice, (128,128,128), screen, 1045,850)
+                                draw_text("Et attendez", fontMenuChoice, (128,128,128), screen, 1045,870)
+
                             if p ==6:
                                 global Poke
                                 choixP()
@@ -806,7 +810,8 @@ def waiting_menu():
                 #prochain combat
                 joueur.save_team()
                 init_IA("wild")
-                IA.team[0].level_up(10)
+                IA.team[0].level_up(joueur.get_stage())
+                joueur.team[0].level_up(joueur.get_stage())
                 battle()
                 joueur.reset_team()
                 joueur.update_team()
@@ -861,14 +866,16 @@ def tourIA():
     """IA lance une attaque sur le joueur"""
     attaque = random.randint(0,3)
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
+    print(f"{IA.get_name()} utilise {IA.get_currentPokemon().moveSet[attaque]}")
     time.sleep(0.5)
 
 def tourJoueur(numAttaque):
     """Le joueur lance une attaque sur l'adversaire (IA)"""
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
-
+    print(f"{joueur.get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1]}")
 def tour(numAttaqueJoueur):
     """Regarde la vie des deux adversaire et en informe le joueur"""
+
     print(f"Vie du pokemon joueur : {joueur.get_currentPokemon().get_hp()}")
     print(f"Vie du pokemon IA : {IA.get_currentPokemon().get_hp()}")
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
