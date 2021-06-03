@@ -10,6 +10,7 @@ import moves
 import CSV_import
 import imageImport
 import shutil
+import music
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -33,7 +34,9 @@ IAlose = False
 def start():
     """Affiche l'écran de démarrage"""
     bg = pygame.image.load('Design/Interface/BackGroundLogo.png')
+    # music.playMusique("intro")
     while True:
+        
 
         pygame.display.flip()
         screen.blit(bg, (0, 0))

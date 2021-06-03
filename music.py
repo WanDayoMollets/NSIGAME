@@ -3,13 +3,7 @@ import random
 import os
 import urllib.request
 
-x,y=1000,640
-window_resolution = (x,y)
-launched = True
 
-pygame.init()
-pygame.display.set_caption("Music")
-window_surface = pygame.display.set_mode(window_resolution)
 def playMusique(event):
     a = True
     if event == "battle":
@@ -51,4 +45,3 @@ def playMusique(event):
                 a = False
     
 
-playMusique("battle")
