@@ -889,6 +889,7 @@ def check_death():
             print("Perdu!")
             global lose
             lose = True
+            dead()
         else:
             joueur.sort_team()
             teamMenu("death")
@@ -962,5 +963,26 @@ def display_pokemon_in_menu():
         if joueur.team[i].get_name() != "None":
             draw_text(f"{joueur.team[i].get_name()}", fontMenuChoice, (0,0,0), screen, xCoords[i],yCoords[i])
 
+def dead():
+    bg = pygame.image.load('Design/Interface/death.png')
+    a = True
+    while a :
 
+        pygame.display.flip()
+        screen.blit(bg, (0, 0))
+        draw_text("Press space to continue", fontMenuChoice, (255,255,255), screen, 100,800)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    a = False
+                    
+                    
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+        
 start()
