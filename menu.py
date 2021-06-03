@@ -866,18 +866,17 @@ def tourIA():
     """IA lance une attaque sur le joueur"""
     attaque = random.randint(0,3)
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
-    print(f"{IA.get_name()} utilise {IA.get_currentPokemon().moveSet[attaque]}")
+    print(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}")
+    draw_text(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}", fontMenuChoice, (66,174,174), screen, x*0.9,y*0.925)
     time.sleep(0.5)
 
 def tourJoueur(numAttaque):
     """Le joueur lance une attaque sur l'adversaire (IA)"""
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
-    print(f"{joueur.get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1]}")
+    print(f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].name}")
 def tour(numAttaqueJoueur):
-    """Regarde la vie des deux adversaire et en informe le joueur"""
+    """Regarde la vie des deux adversaire"""
 
-    print(f"Vie du pokemon joueur : {joueur.get_currentPokemon().get_hp()}")
-    print(f"Vie du pokemon IA : {IA.get_currentPokemon().get_hp()}")
     if joueur.get_currentPokemon().get_speed() >= IA.get_currentPokemon().get_speed():
         tourJoueur(numAttaqueJoueur)
         if is_dead(IA.get_currentPokemon()):
