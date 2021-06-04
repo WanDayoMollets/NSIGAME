@@ -821,13 +821,11 @@ def waiting_menu():
                 #prochain combat
                 joueur.save_team()
                 init_IA("wild")
-                IA.team[0].level_up(joueur.get_stage())
-                joueur.team[0].level_up(joueur.get_stage())
                 battle()
                 musique = threading.Thread(target = playMusique, args = ("pause",))
                 musique.start()
                 joueur.reset_team()
-                joueur.update_team()
+                reward_menu()
                 joueur.set_stage(joueur.get_stage()+1)
         
         if s2.collidepoint((mx,my)):
@@ -846,6 +844,60 @@ def waiting_menu():
         #affiche tous les boutons et le texte
         pygame.draw.rect(screen, (96,191,40), leave)
         draw_text("Quitter", fontMenuChoice, (133,222,81), screen, x*0.9,y*0.925)
+
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+def reward_menu():
+    """Menu des récompenses"""
+    click = False
+    rewardRunning = True
+    bgw = pygame.image.load('Design/Interface/rewardsback.png')
+    Sign1 = pygame.image.load('Design/Interface/panneau1.png').convert_alpha()
+    Sign2 = pygame.image.load('Design/Interface/panneau2.png').convert_alpha()
+    lvl = random.randint(1,2)
+    
+    """Menu d'attente -> organiser son équipe"""
+    while rewardRunning:
+        pygame.display.flip()
+        screen.blit(bgw,(0,0))
+        s1 = screen.blit(Sign1,(650,280))
+        s2 = screen.blit(Sign2,(50,-50))
+
+        if lose == True:
+            rewardRunning = False
+        
+        draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (44,150,77), screen, 600,700)
+        draw_text("Clique sur les panneaux", fontMenuChoice, (229,192,57), screen, 400,930)
+
+        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (229,192,57), screen, 500,75)
+        draw_text(f"+{lvl}niveaux sur {joueur.get_currentPokemon().get_name()}", fontMenuChoice, (229,192,57), screen, 850,250)
+        mx, my = pygame.mouse.get_pos()
+        
+        if s1.collidepoint((mx,my)):
+            if click:
+                print("rec1")
+                print(joueur.get_currentPokemon().get_level())
+                joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+lvl)
+                print(joueur.get_currentPokemon().get_level())
+                joueur.update_team()
+                rewardRunning = False
+        
+        if s2.collidepoint((mx,my)):
+            if click:
+                print("rec2")
+                #test si il reste de la place dans l'équipe et ajoute le poke
+                rewardRunning = False
 
         click = False
 
@@ -922,7 +974,6 @@ def check_death():
             IAlose = True
             #fin combat
         else:
-            #L'IA envoie un autre pokemon, défini pour le moment
             for i in range(len(IA.team)):
                 if IA.get_pokemon(i+1).get_name() != "None":
                     IA.set_currentPokemon(IA.get_pokemon(i+1))
@@ -1047,18 +1098,18 @@ def playMusique(event,idPokemon=0):
             print("pas bon")
         pygame.mixer.music.load("musiques/WildBattle/"+Musique)
         pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops = -1)
     if event == "pause":
         Musique=f"Gen4_{random.randint(1,3)}.ogg"
         pygame.mixer.music.load("musiques/Pause/"+Musique)
         pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops = -1)
         print(Musique)
     if event == "intro":
         Musique=f"Gen4.ogg"
         pygame.mixer.music.load("musiques/Intro/"+Musique)
         pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops = -1)
         print(Musique)
     
     while True:
