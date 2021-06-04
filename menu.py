@@ -10,7 +10,6 @@ import moves
 import CSV_import
 import imageImport
 import shutil
-import music
 
 from pygame.rect import Rect
 from pygame.sprite import collide_rect
@@ -71,6 +70,8 @@ def prof():
     global p
     p = 0
     lines = []
+    musique = threading.Thread(target = playMusique, args = ("intro",))
+    musique.start()
     with open('prof.txt') as f:
         lines = f.readlines()
     
@@ -397,6 +398,8 @@ def optionsMenu():
 
 def battle():
     """fenetre principale lors d'un combat : attaquer/sac/pokemons"""
+    musique = threading.Thread(target = playMusique, args = ("battle",IA.get_currentPokemon().get_pokemon_id()))
+    musique.start()
     running = True
     global IAlose
     IAlose = False
@@ -561,6 +564,8 @@ def attackMenu():
                 if event.key == pygame.K_KP5:
                     joueur.get_currentPokemon().level_up(joueur.get_currentPokemon().get_level()+5)
                     print(f"{joueur.get_currentPokemon().get_level()}")
+                if event.key == pygame.K_ESCAPE:
+                    attackMenuRunning = False
 
         pygame.display.update()
         mainClock.tick(60)
@@ -589,6 +594,7 @@ def teamMenu(condition): #en combat ou pause
         Poke4 = screen.blit(Button,(x*0.05,y*0.85))
         Poke5 = screen.blit(Button,(x*0.33,y*0.85))
         Poke6 = screen.blit(Button,(x*0.61,y*0.85))
+        
         #retourne sur la fenetre de combat
         if returnButton.collidepoint((mx,my)):
             if click:
@@ -787,6 +793,8 @@ def select_pokemon(pokemonNb,condition):
 def waiting_menu():
     """Interface qui permet au joueur de réorganiser son équipe, de continuer la partie, ou de la quitter"""
     shutil.rmtree("cache/start")
+    musique = threading.Thread(target = playMusique, args = ("pause",))
+    musique.start()
     click = False
     gameRunning = True
     bgw = pygame.image.load('Design/Interface/gestionback.png')
@@ -816,6 +824,8 @@ def waiting_menu():
                 IA.team[0].level_up(joueur.get_stage())
                 joueur.team[0].level_up(joueur.get_stage())
                 battle()
+                musique = threading.Thread(target = playMusique, args = ("pause",))
+                musique.start()
                 joueur.reset_team()
                 joueur.update_team()
                 joueur.set_stage(joueur.get_stage()+1)
@@ -945,11 +955,8 @@ def init_game():
     global joueur
     global lose
     lose = False
-    #Pokemon1 = Poke
-    #inputPlayer = "joueur test"
-    #Pokemon1 = CSV_import.PokeCSV(random.randint(1,649))
     Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
-    #Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
+    Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
     Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
     joueur = player.Player("notDefined",[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
@@ -1019,6 +1026,51 @@ def dead():
 
         pygame.display.update()
         mainClock.tick(60)
+
+def playMusique(event,idPokemon=0):
+    pygame.mixer.init()
+    a = True
+    if pygame.mixer.get_busy() == True:
+        print("yes")
+    if event == "battle":
+        if idPokemon <= 151:
+            Musique=f"Gen1_{random.randint(1,1)}.ogg"
+        elif idPokemon <= 251:
+            Musique=f"Gen2_{random.randint(1,3)}.ogg"
+        elif idPokemon <= 386:
+            Musique=f"Gen3_{random.randint(1,2)}.ogg"
+        elif idPokemon <= 493:
+            Musique=f"Gen4_{random.randint(1,7)}.ogg"
+        elif idPokemon <= 649:
+            Musique=f"Gen5_{random.randint(1,3)}.ogg"
+        else:
+            print("pas bon")
+        pygame.mixer.music.load("musiques/WildBattle/"+Musique)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play()
+    if event == "pause":
+        Musique=f"Gen4_{random.randint(1,3)}.ogg"
+        pygame.mixer.music.load("musiques/Pause/"+Musique)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play()
+        print(Musique)
+    if event == "intro":
+        Musique=f"Gen4.ogg"
+        pygame.mixer.music.load("musiques/Intro/"+Musique)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play()
+        print(Musique)
+    
+    while True:
+        click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()           
+
+        pygame.display.update()
+        mainClock.tick(0.01)
 
         
 start()

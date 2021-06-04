@@ -1,1 +1,1 @@
-python menu.py
+py menu.py
