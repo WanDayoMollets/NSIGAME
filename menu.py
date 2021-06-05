@@ -820,11 +820,21 @@ def waiting_menu():
             if click:
                 #prochain combat
                 joueur.save_team()
-                init_IA("wild")
+                if joueur.get_stage() % 5 == 0:
+                    print("trainer")
+                    init_IA("trainer")
+                else:
+                    print("wild")
+                    init_IA("wild")
+                IA.save_team()
+                global reward
+                reward = IA.get_pokemon(1)
                 battle()
                 musique = threading.Thread(target = playMusique, args = ("pause",))
                 musique.start()
                 joueur.reset_team()
+                IA.set_pokemon(1,reward)
+                IA.reset_team()
                 reward_menu()
                 joueur.set_stage(joueur.get_stage()+1)
         
@@ -880,7 +890,7 @@ def reward_menu():
         draw_text(f"STAGE : {joueur.get_stage()}", fontMenu, (44,150,77), screen, 600,700)
         draw_text("Clique sur les panneaux", fontMenuChoice, (229,192,57), screen, 400,930)
 
-        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (229,192,57), screen, 500,75)
+        draw_text(f"{IA.team[0].get_name()}", fontMenuChoice, (229,192,57), screen, 500,75)
         draw_text(f"+{lvl}niveaux sur {joueur.get_currentPokemon().get_name()}", fontMenuChoice, (229,192,57), screen, 850,250)
         mx, my = pygame.mouse.get_pos()
         
@@ -896,7 +906,8 @@ def reward_menu():
         if s2.collidepoint((mx,my)):
             if click:
                 print("rec2")
-                #test si il reste de la place dans l'équipe et ajoute le poke
+                print(joueur.has_full_team())
+                joueur.add_pokemon(IA.team[0])
                 rewardRunning = False
 
         click = False
@@ -1008,7 +1019,6 @@ def init_game():
     lose = False
     Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6 = notPokemon, notPokemon, notPokemon, notPokemon, notPokemon, notPokemon
     Pokemon2 = CSV_import.PokeCSV(random.randint(1,649))
-    Pokemon3 = CSV_import.PokeCSV(random.randint(1,649))
     joueur = player.Player("notDefined",[Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6],[])
     joueur.update_team()
 
@@ -1099,13 +1109,13 @@ def playMusique(event,idPokemon=0):
         pygame.mixer.music.load("musiques/WildBattle/"+Musique)
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(loops = -1)
-    if event == "pause":
+    elif event == "pause":
         Musique=f"Gen4_{random.randint(1,3)}.ogg"
         pygame.mixer.music.load("musiques/Pause/"+Musique)
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(loops = -1)
         print(Musique)
-    if event == "intro":
+    elif event == "intro":
         Musique=f"Gen4.ogg"
         pygame.mixer.music.load("musiques/Intro/"+Musique)
         pygame.mixer.music.set_volume(0.1)
@@ -1114,7 +1124,8 @@ def playMusique(event,idPokemon=0):
     
     while True:
         click = False
-
+        if lose == True:
+            break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

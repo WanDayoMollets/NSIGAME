@@ -49,6 +49,23 @@ class Player:
             return False
         return True
     
+    def add_pokemon(self,pokemon):
+        """Ajoute un pokemon dans la team"""
+        for i in range(len(self.team)):
+            if self.team[i].get_name() == "None":
+                self.set_pokemon(i+1,pokemon)
+                break
+    
+    def has_full_team(self):
+        """renvoie True si la team est full, False s'il reste de la place dans la team"""
+        pokemonInTeam = 0
+        for pokemon in self.team:
+            if pokemon.get_name() != "None":
+                pokemonInTeam += 1
+        if pokemonInTeam == 6:
+            return True
+        return False
+    
     def get_currentPokemon_position(self):
         """Renvoie la position du pokemon dans la team"""
         for i in range(len(self.team)):
