@@ -146,7 +146,7 @@ def prof():
         pygame.display.update()
         mainClock.tick(60)
 
-def parlez(texte,x,y,color):
+def parlez(texte,x,y,color,condition="intro"):
     """Permet de faire defiler le texte"""
     if color == 0:
         c = (255,255,255)
@@ -155,20 +155,27 @@ def parlez(texte,x,y,color):
     a = True
     b= True
     i=0
+    box = pygame.image.load('Design/Interface/acier.png').convert_alpha()
     while a:
-
+        if condition == "battle":
+            screen.blit(box,(32,590))
         if b:
             i+=1
-            texteP(texte,i,x,y,c)
+            texteP(texte,i,x,y,c,condition)
             if i >= len(texte):    
                 b=False
             time.sleep(0.03)
         if not b:
-            if event.type == MOUSEBUTTONDOWN:
-                if click:
-                    a = False
-                    click = False
-            
+            for event in pygame.event.get():
+                if event.type == MOUSEBUTTONDOWN:
+                    if click:
+                        a = False
+                        click = False
+            if condition == "battle":
+                a = False
+                time.sleep(0.5)
+        
+        
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -183,9 +190,12 @@ def parlez(texte,x,y,color):
         pygame.display.update()
         mainClock.tick(60)
 
-def texteP(texte,i,x,y,c):
+def texteP(texte,i,x,y,c,condition="intro"):
     """Permet d'écrire une phrase du texte, sans le retour à la ligne"""
-    draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
+    if condition == "intro":
+        draw_text(texte[:i-1], fontMenuChoice, c, screen, x,y)
+    elif condition == "battle":
+        draw_text(texte[:i+1], fontMenuChoice, c, screen, x,y)
 
 def demande():
     """Lance une interface qui demande le nom du Joueur"""
@@ -425,11 +435,18 @@ def battle():
         
         screen.blit(currentPokemonJoueur,(128,230))
         screen.blit(currentPokemonIA,(770,-30))
-        b1 = screen.blit(button1,(20,525))
-        b2 = screen.blit(button2,(700,550))
+
         hp = screen.blit(HP,(820,450))
         hp2 = screen.blit(HP,(820,-60))
-        
+        draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
+        draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
+        draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
+
+        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
+        draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
+        draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
+
+        draw_text(dcc, fontMenuChoice, (66,174,70), screen,800,850)
         mx, my = pygame.mouse.get_pos()
         screen.blit(menuBackground,(32,590))
         attackButton = screen.blit(button1,(20,525))
@@ -446,15 +463,7 @@ def battle():
         #affiche tous les boutons et le texte
         draw_text("Attaquer", fontMenu, (207,33,33), screen, 210,730)
         draw_text("NoméKops", fontMenuChoice, (33,96,207), screen, 900,690)
-        draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
-        draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
-        draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
-
-        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
-        draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
-        draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
-
-        draw_text(dcc, fontMenuChoice, (66,174,70), screen,800,850)
+        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -537,14 +546,6 @@ def attackMenu():
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(3)} | {joueur.get_currentPokemon().get_pokemon_move_power(3)}", fontMenuChoice, (207,33,33), screen,220,870)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move(4)}", fontMenuChoice, (207,33,33), screen, 780,840)
         draw_text(f"{joueur.get_currentPokemon().get_pokemon_move_category(4)} | {joueur.get_currentPokemon().get_pokemon_move_power(4)}", fontMenuChoice, (207,33,33), screen,790,870)
-
-        draw_text(f"{joueur.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,540)
-        draw_text(f"{joueur.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,540)
-        draw_text(f"{joueur.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,540)
-
-        draw_text(f"{IA.get_currentPokemon().get_name()}", fontMenuChoice, (255,255,255), screen,850,30)
-        draw_text(f"{IA.get_currentPokemon().get_hp()}", fontMenuChoice, (255,255,255), screen,1050,30)
-        draw_text(f"{IA.get_currentPokemon().get_level()}", fontMenuChoice, (255,255,255), screen,1150,30)
 
         click = False
 
@@ -942,6 +943,7 @@ def tourIA():
     """IA lance une attaque sur le joueur"""
     attaque = random.randint(0,3)
     IA.get_currentPokemon().attack_target(joueur.get_currentPokemon(),IA.get_currentPokemon().moveSet[attaque])
+    parlez(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].get_name()}",500,800,1,"battle")
     print(f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}")
     dcc = f"{IA.get_currentPokemon().get_name()} utilise {IA.get_currentPokemon().moveSet[attaque].name}"
     time.sleep(0.5)
@@ -950,6 +952,7 @@ def tourIA():
 def tourJoueur(numAttaque):
     """Le joueur lance une attaque sur l'adversaire (IA)"""
     joueur.get_currentPokemon().attack_target(IA.get_currentPokemon(),joueur.get_currentPokemon().moveSet[numAttaque-1])
+    parlez(f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].get_name()}",500,800,1,"battle")
     print(f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].name}")
     dcc = f"{joueur.get_currentPokemon().get_name()} utilise {joueur.get_currentPokemon().moveSet[numAttaque-1].name}"
     return dcc
