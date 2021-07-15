@@ -168,7 +168,7 @@ def parlez(texte,x,y,color,condition="intro"):
         if not b:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN:
-                    if click:
+                    if event.button == 1:
                         a = False
                         click = False
             if condition == "battle":
